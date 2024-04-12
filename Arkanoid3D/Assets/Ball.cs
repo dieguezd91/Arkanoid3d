@@ -8,7 +8,7 @@ public class Ball : MonoBehaviour
     public float speed;
     public Vector3 velocity;
     private Vector3 direction; // Dirección de movimiento de la pelota
-    private bool isMoving = false; // Flag para controlar si la pelota está en movimiento
+    private bool isMoving = false; // bool para controlar si la pelota está en movimiento
 
     void Start()
     {
@@ -28,8 +28,6 @@ public class Ball : MonoBehaviour
             // Mover la pelota en su dirección a la velocidad especificada
             transform.Translate(direction * speed * Time.deltaTime);
 
-            //// Detectar colisiones con los bordes y cambiar la dirección
-            //CheckCollisionWithBorders();
         }
     }
 
@@ -38,25 +36,6 @@ public class Ball : MonoBehaviour
         isMoving = true;
     }
 
-    //void CheckCollisionWithBorders()
-    //{
-    //    // Obtener los límites de la pantalla
-    //    float minX = -10f;
-    //    float maxX = 10f;
-    //    float minZ = -5f;
-    //    float maxZ = 5f;
-
-    //    // Verificar colisión con bordes y cambiar la dirección
-    //    if (transform.position.x < minX || transform.position.x > maxX)
-    //    {
-    //        direction.x = -direction.x;
-    //    }
-
-    //    if (transform.position.z < minZ || transform.position.z > maxZ)
-    //    {
-    //        direction.z = -direction.z;
-    //    }
-    //}
 
     void OnCollisionStay(Collision collision)
     {

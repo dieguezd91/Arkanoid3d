@@ -6,29 +6,29 @@ using UnityEngine;
 public class Brick : MonoBehaviour
 {
     public int HP;
-
+    MeshRenderer _renderer;
+    string materialName;
 
     private void Start()
     {
-        MeshRenderer renderer = GetComponent<MeshRenderer>();
+        _renderer = GetComponent<MeshRenderer>();
 
-        string materialName = renderer.material.name;
+        materialName = _renderer.material.name;
 
-        if (materialName.Contains("Red"))
+        switch (materialName)
         {
-            HP = 3;
-        }
-        else if (materialName.Contains("Orange"))
-        {
-            HP = 2;
-        }
-        else if (materialName.Contains("Yellow"))
-        {
-            HP = 1;
-        }
-        else
-        {
-            HP = 1; // Valor predeterminado si el material no coincide con ninguno de los casos anteriores
+            case string name when name.Contains("Red"):
+                HP = 3;
+                break;
+            case string name when name.Contains("Orange"):
+                HP = 2;
+                break;
+            case string name when name.Contains("Yellow"):
+                HP = 1;
+                break;
+            default:
+                HP = 1; // Valor predeterminado si el material no coincide con ninguno de los casos anteriores
+                break;
         }
     }
 
