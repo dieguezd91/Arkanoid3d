@@ -149,4 +149,5 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   horizontalInput: 0
-  speedMovement: 5
+  speedMovement: 15
+  xRange: 21
