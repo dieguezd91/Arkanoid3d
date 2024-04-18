@@ -7,41 +7,21 @@ public class Ball : MonoBehaviour
     public Rigidbody rb;
     public float speed;
     public Vector3 velocity;
-    private Vector3 direction; // Dirección de movimiento de la pelota
-    private bool isMoving = false; // bool para controlar si la pelota está en movimiento
+    public Vector3 direction; // Dirección de movimiento de la pelota
 
-    void Start()
+    public void UpdateBall()
     {
-        // Inicializar la dirección de la pelota al azar solo una vez
-        direction = new Vector3(Random.Range(-1f, 1f), 0f, 1f).normalized;
+        transform.Translate(direction * speed * Time.deltaTime);                // Mover la pelota en su dirección a la velocidad especificada
     }
 
-    private void Update()
+    void OnCollisionEnter(Collision collision)
     {
-        if (!isMoving && Input.GetKeyDown(KeyCode.Space))
+        if (collision.gameObject.CompareTag("DeadZone")) GameManager.instance.LooseRound();             //Si colisiona con la pared inferior, perder la ronda
+        else                                                                                            //Cambiar la dirección de la pelota al colisionar con otro objeto
         {
-            StartMoving();
+            direction = Vector3.Reflect(direction, collision.contacts[0].normal);
+            direction.y = 0f;                                                       // Mantener la dirección en el eje Y en 0 para evitar movimientos verticales
+            direction = direction.normalized;                                       // Normalizar la dirección
         }
-
-        if (isMoving)
-        {
-            // Mover la pelota en su dirección a la velocidad especificada
-            transform.Translate(direction * speed * Time.deltaTime);
-
-        }
-    }
-
-    void StartMoving()
-    {
-        isMoving = true;
-    }
-
-
-    void OnCollisionStay(Collision collision)
-    {
-        // Cambiar la dirección de la pelota al colisionar con otro objeto
-        direction = Vector3.Reflect(direction, collision.contacts[0].normal);
-        direction.y = 0f; // Mantener la dirección en el eje Y en 0 para evitar movimientos verticales
-        direction = direction.normalized; // Normalizar la dirección
     }
 }
