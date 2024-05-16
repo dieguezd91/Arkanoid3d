@@ -8,6 +8,7 @@ public class Brick : MonoBehaviour
     public int HP;
     MeshRenderer _renderer;
     string materialName;
+    [SerializeField] GameObject upgradePrefab;
 
     private void Start()
     {
@@ -32,28 +33,27 @@ public class Brick : MonoBehaviour
         }
     }
 
-    private void Update()
-    {
-        if (HP <= 0)
-            DestroyBrick();
-
-    }
-
     private void OnCollisionEnter(Collision collision)
     {
-        if(collision.gameObject.CompareTag("Ball"))
-        {
-            TakeDamage();      
-        }
+        if(collision.gameObject.CompareTag("Ball")) TakeDamage();     
     }
 
     void TakeDamage()
     {
         HP--; // Reducir los puntos de vida
+        if (HP <= 0) DestroyBrick();
     }
 
     private void DestroyBrick()
     {
+        TrySpawnUpgrade();
         Destroy(gameObject, .3f);
+    }
+
+    private void TrySpawnUpgrade()
+    {
+        int n = Random.Range(0, 10);
+        Debug.Log(n);
+        if (n < 3) Instantiate(upgradePrefab, transform.position, transform.rotation);
     }
 }

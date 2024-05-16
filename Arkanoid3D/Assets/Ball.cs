@@ -16,7 +16,13 @@ public class Ball : MonoBehaviour
         direction = new Vector3(Random.Range(-1f, 1f), 0f, 1f).normalized;
     }
 
+<<<<<<< Updated upstream
     private void Update()
+=======
+    public void SetNewDirection() => direction = new Vector3(Random.Range(-1f, 1f), 0f, 1f).normalized;
+
+    void OnCollisionEnter(Collision collision)
+>>>>>>> Stashed changes
     {
         if (!isMoving && Input.GetKeyDown(KeyCode.Space))
         {

@@ -2105,18 +2105,6 @@ PrefabInstance:
       value: Ball
       objectReference: {fileID: 0}
     - target: {fileID: 1718045564843423234, guid: ece0052089087a247828471bb60968e2, type: 3}
-      propertyPath: m_LocalScale.x
-      value: 1.5
-      objectReference: {fileID: 0}
-    - target: {fileID: 1718045564843423234, guid: ece0052089087a247828471bb60968e2, type: 3}
-      propertyPath: m_LocalScale.y
-      value: 1.5
-      objectReference: {fileID: 0}
-    - target: {fileID: 1718045564843423234, guid: ece0052089087a247828471bb60968e2, type: 3}
-      propertyPath: m_LocalScale.z
-      value: 1.5
-      objectReference: {fileID: 0}
-    - target: {fileID: 1718045564843423234, guid: ece0052089087a247828471bb60968e2, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
       objectReference: {fileID: 0}
@@ -2156,6 +2144,7 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+<<<<<<< Updated upstream
     - target: {fileID: 1718045564843423234, guid: ece0052089087a247828471bb60968e2, type: 3}
       propertyPath: m_ConstrainProportionsScale
       value: 1
@@ -2168,6 +2157,8 @@ PrefabInstance:
       propertyPath: m_CollisionDetection
       value: 1
       objectReference: {fileID: 0}
+=======
+>>>>>>> Stashed changes
     - target: {fileID: 8986971176297939421, guid: ece0052089087a247828471bb60968e2, type: 3}
       propertyPath: m_Material
       value: 
@@ -5874,3 +5865,8 @@ SceneRoots:
   - {fileID: 471628485}
   - {fileID: 1802684787}
   - {fileID: 65110914}
+<<<<<<< Updated upstream
+=======
+  - {fileID: 96023339}
+  - {fileID: 1431433816}
+>>>>>>> Stashed changes
