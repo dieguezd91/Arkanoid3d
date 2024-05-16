@@ -23,9 +23,13 @@ public class GameManager : MonoBehaviour
     GameObject[] Bricks;
     int bricksLeft;
 
+    [Header("LIFE MANAGEMENT")]
     public int initLives;
     int _lives;
     public int Lives => _lives;
+
+    //UPGRADES MANAGEMENT
+    bool isUpgraded;
 
     private void Start()
     {

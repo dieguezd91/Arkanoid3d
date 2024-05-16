@@ -5,42 +5,48 @@ using UnityEngine;
 
 public class Upgrade : MonoBehaviour
 {
+
+    //TODO: APLICAR DIFERENTES VALORES DE CADA UPGRADE CON SCRIPTABLES
     [SerializeField] string upgradeName;
     [SerializeField] float speed;
-    Rigidbody _rb;
+    [SerializeField] float upgradeDuration;
+    float _upgradeStartTime;
 
-    private void Start()
+    void Start()
     {
-        _rb = GetComponent<Rigidbody>();
-        SetVelocity();
+        GetComponent<Rigidbody>().velocity = Vector3.back * speed;
     }
 
-    private void OnTriggerEnter(Collider collision)
+    private void Update()
     {
-        if (collision.gameObject.CompareTag("Player"))
-            ApplyUpgrade();
-        else if (collision.gameObject.CompareTag("DeadZone"))
-            DestroyUpgrade();
+        if (CheckUpgradeFinishTime()) EndUpgrade();
     }
 
-    void SetVelocity()                //CONSULTAR SI DEFINIR Y DECLARAR RB SERÍA MEJOR
+    void OnTriggerEnter(Collider collision)
     {
-        _rb.velocity = Vector3.back * speed;
+        if (collision.gameObject.CompareTag("Player")) ApplyUpgrade();
+        else if (collision.gameObject.CompareTag("DeadZone")) DestroyUpgrade();
     }
 
-    void ApplyUpgrade()
+    public virtual void ApplyUpgrade()
+    {
+        _upgradeStartTime = Time.time;
+        GetComponent<MeshRenderer>().enabled = false;
+
+#if UNITY_EDITOR
+            Debug.Log($"Upgrade started: {upgradeName}");
+#endif
+    }
+
+    public virtual void EndUpgrade()
     {
 #if UNITY_EDITOR
-        Debug.Log($"Upgrade: {upgradeName}");
+        Debug.Log($"Upgrade ended: {upgradeName}");
 #endif
-        Destroy(gameObject);
+        DestroyUpgrade();
     }
 
-    void DestroyUpgrade()
-    {
-#if UNITY_EDITOR
-        Debug.Log($"{upgradeName} lost");
-#endif
-        Destroy(gameObject);
-    }
+    bool CheckUpgradeFinishTime() => Time.time >= _upgradeStartTime + upgradeDuration;
+
+    public void DestroyUpgrade() => Destroy(gameObject);
 }
