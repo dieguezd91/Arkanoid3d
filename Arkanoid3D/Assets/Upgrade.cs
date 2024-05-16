@@ -46,7 +46,7 @@ public class Upgrade : MonoBehaviour
         DestroyUpgrade();
     }
 
-    bool CheckUpgradeFinishTime() => Time.time >= _upgradeStartTime + upgradeDuration;
+    bool CheckUpgradeFinishTime() => _upgradeStartTime != 0 && Time.time >= _upgradeStartTime + upgradeDuration;
 
     public void DestroyUpgrade() => Destroy(gameObject);
 }
