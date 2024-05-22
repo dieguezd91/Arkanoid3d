@@ -9,7 +9,7 @@ public class PlayerController : MonoBehaviour
     public float speedMovement;
     public float xRange;
 
-    void Update()
+    public void UpdatePlayer()
     {
         horizontalInput = Input.GetAxis("Horizontal");
 
