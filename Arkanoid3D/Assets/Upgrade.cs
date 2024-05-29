@@ -32,10 +32,6 @@ public class Upgrade : MonoBehaviour
     {
         _upgradeStartTime = Time.time;
         GetComponent<MeshRenderer>().enabled = false;
-
-#if UNITY_EDITOR
-            Debug.Log($"Upgrade started: {upgradeName}");
-#endif
     }
 
     public virtual void EndUpgrade()

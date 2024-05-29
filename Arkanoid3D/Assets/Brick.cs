@@ -53,7 +53,6 @@ public class Brick : MonoBehaviour
     private void TrySpawnUpgrade()
     {
         int n = Random.Range(0, 10);
-        Debug.Log(n);
         if (n < 3) Instantiate(upgradePrefab, transform.position, transform.rotation);
     }
 }

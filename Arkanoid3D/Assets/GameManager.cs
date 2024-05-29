@@ -5,20 +5,14 @@ using UnityEngine;
 public class GameManager : MonoBehaviour
 {
     public static GameManager instance;
-
-<<<<<<< Updated upstream
     public int lifes;
 
-    // Start is called before the first frame update
-    void Start()
-=======
     [Header("BALL")]
     GameObject _ball;
     public GameObject Ball => _ball;
     Ball ballScript;
     [SerializeField] Transform ballInitPos;
     bool isGameRunning;
-
 
     [Header("PLAYER")]
     GameObject _player;
@@ -37,39 +31,14 @@ public class GameManager : MonoBehaviour
     public int Lives => _lives;
 
     //UPGRADES MANAGEMENT
-    GameObject[] extraBalls;
+    List<GameObject> extraBalls = new List<GameObject>();
+    public List<GameObject> ExtraBalls => extraBalls;
 
     private void Start()
->>>>>>> Stashed changes
     {
-        
-    }
+        if (instance == null) instance = this;
+        else Destroy(gameObject);
 
-    // Update is called once per frame
-    void Update()
-    {
-<<<<<<< Updated upstream
-        
-=======
-        if(isGameRunning)
-        { 
-            ballScript.UpdateBall();
-            playerScript.UpdatePlayer();
-            bricksLeft = Bricks.Length;
-            if (bricksLeft == 0) Win();
-            foreach(GameObject extraBall in extraBalls) extraBall.GetComponent<Ball>().UpdateBall();
-        }
-        else if (Input.GetKeyDown(KeyCode.Space)) isGameRunning = true;
->>>>>>> Stashed changes
-    }
-
-    public void Lose()
-    {
-<<<<<<< Updated upstream
-        Debug.Log("Perdiste");
-    }
-}
-=======
         //Ball
         _ball = GameObject.FindGameObjectWithTag("Ball");
         ballInitPos = GameObject.Find("BallInitPos").GetComponent<Transform>();
@@ -84,6 +53,23 @@ public class GameManager : MonoBehaviour
         Bricks = GameObject.FindGameObjectsWithTag("Brick");
     }
 
+    void Update()
+    {
+        if(isGameRunning)
+        { 
+            ballScript.UpdateBall();
+            playerScript.UpdatePlayer();
+            bricksLeft = Bricks.Length;
+            if (bricksLeft == 0) Win();
+            if(extraBalls.Count > 0) foreach(GameObject extraBall in extraBalls) extraBall.GetComponent<Ball>().UpdateBall();
+        }
+        else if (Input.GetKeyDown(KeyCode.Space)) isGameRunning = true;
+    }
+
+    public void Lose()
+    {
+        Debug.Log("Perdiste");
+    }
     void SetGame()
     {
         RestartPositions();
@@ -97,7 +83,7 @@ public class GameManager : MonoBehaviour
         SetGame();
     }
 
-    public void LooseRound()
+    public void LoseRound()
     {
         isGameRunning = false;
         if (_lives > 0)
@@ -108,7 +94,6 @@ public class GameManager : MonoBehaviour
         }
         else EndGame();
     }
-
     void EndGame()
     {
         Debug.Log("Game lost");
@@ -125,4 +110,3 @@ public class GameManager : MonoBehaviour
         _player.transform.SetPositionAndRotation(playerInitPos.position, playerInitPos.rotation);
     }
 }
->>>>>>> Stashed changes

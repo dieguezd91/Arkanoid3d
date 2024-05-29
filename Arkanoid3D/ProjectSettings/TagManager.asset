@@ -9,6 +9,7 @@ TagManager:
   - Wall
   - Ground
   - DeadZone
+  - ExtraBall
   layers:
   - Default
   - TransparentFX

@@ -16,7 +16,7 @@ GameObject:
   - component: {fileID: 224125894090387970}
   m_Layer: 6
   m_Name: ExtraBall
-  m_TagString: Ball
+  m_TagString: ExtraBall
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -149,4 +149,3 @@ MonoBehaviour:
   rb: {fileID: 7973921909314575921}
   speed: 25
   velocity: {x: 0, y: 0, z: 0}
-  direction: {x: 0, y: 0, z: 0}
