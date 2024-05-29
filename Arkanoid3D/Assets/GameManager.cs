@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class GameManager : MonoBehaviour
@@ -41,22 +42,27 @@ public class GameManager : MonoBehaviour
         else Destroy(gameObject);
 
         GetActors();
-        SetGame();
     }
 
     void Update()
     {
-        if(isGameRunning)
-        { 
+        if (isGameRunning)
+        {
             ballScript.UpdateBall();
             playerScript.UpdatePlayer();
             bricksLeft = Bricks.Length;
             if (bricksLeft == 0) Win();
-            if(extraBalls.Count > 0) foreach(GameObject extraBall in extraBalls) extraBall.GetComponent<Ball>().UpdateBall();
+            if (extraBalls.Count > 0) foreach (GameObject extraBall in extraBalls) extraBall.GetComponent<Ball>().UpdateBall();
         }
-        else if (Input.GetKeyDown(KeyCode.Space)) isGameRunning = true;
+        else if (Input.GetKeyDown(KeyCode.Space)) StartGame();
     }
 
+
+    void StartGame()
+    {
+        isGameRunning = true;
+        ballScript.SetNewDirection();
+    }
     void GetActors()
     {
         //Ball
@@ -65,9 +71,9 @@ public class GameManager : MonoBehaviour
         ballScript = _ball.GetComponent<Ball>();
 
         //Player
-        Player = GameObject.FindGameObjectWithTag("Player");
+        _player = GameObject.FindGameObjectWithTag("Player");
         playerInitPos = GameObject.Find("PlayerInitPos").GetComponent<Transform>();
-        playerScript = Player.GetComponent<PlayerController>();
+        playerScript = _player.GetComponent<PlayerController>();
 
         //Bricks
         Bricks = GameObject.FindGameObjectsWithTag("Brick");
@@ -87,7 +93,6 @@ public class GameManager : MonoBehaviour
     }
     public void LoseRound()
     {
-        isGameRunning = false;
         if (_lives > 0)
         {
             Debug.Log("You lost");
@@ -107,6 +112,9 @@ public class GameManager : MonoBehaviour
         isGameRunning = false;
         _ball.transform.SetPositionAndRotation(ballInitPos.position, ballInitPos.rotation);
         ballScript.SetNewDirection();
+        ballScript.RB.velocity = Vector2.zero;
+        foreach (GameObject extraBall in extraBalls) Destroy(extraBall);
+        extraBalls = new List<GameObject>();
 
         Player.transform.SetPositionAndRotation(playerInitPos.position, playerInitPos.rotation);
     }

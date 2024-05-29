@@ -8,7 +8,7 @@ public class Brick : MonoBehaviour
     public int HP;
     MeshRenderer _renderer;
     string materialName;
-    [SerializeField] GameObject upgradePrefab;
+    [SerializeField] GameObject[] _upgrades;
 
     private void Start()
     {
@@ -53,6 +53,17 @@ public class Brick : MonoBehaviour
     private void TrySpawnUpgrade()
     {
         int n = Random.Range(0, 10);
-        if (n < 3) Instantiate(upgradePrefab, transform.position, transform.rotation);
+        if (n < 3) Instantiate(CreateUpgrade(), transform.position, transform.rotation);
+    }
+
+    GameObject CreateUpgrade()
+    {
+        GameObject newUpgrade;
+        int r = Random.Range(0, 100);
+        if (r > 75) newUpgrade = _upgrades[0];
+        else if (r > 50) newUpgrade = _upgrades[1];
+        else if (r > 25) newUpgrade = _upgrades[2];
+        else newUpgrade = _upgrades[3];
+        return newUpgrade;
     }
 }
