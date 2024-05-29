@@ -97,6 +97,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2abcd4999bf7a5d4f8e31a5b9d31ab6c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  HP: 0
+  upgradePrefab: {fileID: 2572195797281292629, guid: a29e9a39375fe974e8eb38d0a7af6f62, type: 3}
 --- !u!65 &7177952780905683430
 BoxCollider:
   m_ObjectHideFlags: 0

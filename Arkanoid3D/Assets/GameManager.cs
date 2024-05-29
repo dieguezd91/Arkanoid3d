@@ -7,16 +7,18 @@ public class GameManager : MonoBehaviour
     public static GameManager instance;
 
     [Header("BALL")]
-    GameObject Ball;
-    Ball ballScript;
     [SerializeField] Transform ballInitPos;
+    public GameObject  Ball => _ball;
+    GameObject _ball;
+    Ball ballScript;
     bool isGameRunning;
 
 
     [Header("PLAYER")]
-    GameObject Player;
-    PlayerController playerScript;
     [SerializeField] Transform playerInitPos;
+    public GameObject Player => _player;
+    GameObject _player;
+    PlayerController playerScript;
 
 
     [Header("BRICKS")]
@@ -30,6 +32,8 @@ public class GameManager : MonoBehaviour
 
     //UPGRADES MANAGEMENT
     bool isUpgraded;
+    List<GameObject> extraBalls = new List<GameObject>();
+    public List<GameObject> ExtraBalls => extraBalls;
 
     private void Start()
     {
@@ -40,7 +44,7 @@ public class GameManager : MonoBehaviour
         SetGame();
     }
 
-    private void Update()
+    void Update()
     {
         if(isGameRunning)
         { 
@@ -48,6 +52,7 @@ public class GameManager : MonoBehaviour
             playerScript.UpdatePlayer();
             bricksLeft = Bricks.Length;
             if (bricksLeft == 0) Win();
+            if(extraBalls.Count > 0) foreach(GameObject extraBall in extraBalls) extraBall.GetComponent<Ball>().UpdateBall();
         }
         else if (Input.GetKeyDown(KeyCode.Space)) isGameRunning = true;
     }
@@ -55,9 +60,9 @@ public class GameManager : MonoBehaviour
     void GetActors()
     {
         //Ball
-        Ball = GameObject.FindGameObjectWithTag("Ball");
+        _ball = GameObject.FindGameObjectWithTag("Ball");
         ballInitPos = GameObject.Find("BallInitPos").GetComponent<Transform>();
-        ballScript = Ball.GetComponent<Ball>();
+        ballScript = _ball.GetComponent<Ball>();
 
         //Player
         Player = GameObject.FindGameObjectWithTag("Player");
@@ -80,8 +85,7 @@ public class GameManager : MonoBehaviour
         Debug.Log("You won");
         SetGame();
     }
-
-    public void LooseRound()
+    public void LoseRound()
     {
         isGameRunning = false;
         if (_lives > 0)
@@ -92,7 +96,6 @@ public class GameManager : MonoBehaviour
         }
         else EndGame();
     }
-
     void EndGame()
     {
         Debug.Log("Game lost");
@@ -102,9 +105,8 @@ public class GameManager : MonoBehaviour
     public void RestartPositions()
     {
         isGameRunning = false;
-
-        Ball.transform.SetPositionAndRotation(ballInitPos.position, ballInitPos.rotation);
-        ballScript.direction = new Vector3(Random.Range(-1f, 1f), 0f, 1f).normalized;
+        _ball.transform.SetPositionAndRotation(ballInitPos.position, ballInitPos.rotation);
+        ballScript.SetNewDirection();
 
         Player.transform.SetPositionAndRotation(playerInitPos.position, playerInitPos.rotation);
     }

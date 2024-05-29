@@ -12,7 +12,7 @@ public class Upgrade : MonoBehaviour
     float _upgradeStartTime;
     private bool _isUpgradeActive = false;
 
-    void Start()
+    public virtual void Start()
     {
         GetComponent<Rigidbody>().velocity = Vector3.back * speed;
     }
