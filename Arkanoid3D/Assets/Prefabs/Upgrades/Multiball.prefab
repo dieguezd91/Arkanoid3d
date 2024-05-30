@@ -123,7 +123,7 @@ MonoBehaviour:
   speed: 4
   upgradeDuration: 1
   ballsToSpawn: 4
-  ballPrefab: {fileID: 843888646815367402, guid: bb31049190d9a974a91db094a5adeaf7, type: 3}
+  ballPrefab: {fileID: 843888646815367402, guid: ece0052089087a247828471bb60968e2, type: 3}
 --- !u!54 &1451597161527578473
 Rigidbody:
   m_ObjectHideFlags: 0

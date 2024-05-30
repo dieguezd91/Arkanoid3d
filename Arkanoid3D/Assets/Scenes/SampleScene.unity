@@ -234,6 +234,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ballInitPos: {fileID: 96023339}
+  ballPrefab: {fileID: 843888646815367402, guid: ece0052089087a247828471bb60968e2, type: 3}
+  maxBalls: 0
+  _balls: []
   playerInitPos: {fileID: 1431433816}
   initLives: 3
 --- !u!4 &65110914
@@ -2301,6 +2304,10 @@ PrefabInstance:
     - target: {fileID: 843888646815367402, guid: ece0052089087a247828471bb60968e2, type: 3}
       propertyPath: m_Name
       value: Ball
+      objectReference: {fileID: 0}
+    - target: {fileID: 843888646815367402, guid: ece0052089087a247828471bb60968e2, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1718045564843423234, guid: ece0052089087a247828471bb60968e2, type: 3}
       propertyPath: m_LocalPosition.x

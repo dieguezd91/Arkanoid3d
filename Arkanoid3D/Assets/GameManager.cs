@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using Unity.VisualScripting;
 using UnityEngine;
 
@@ -9,11 +10,15 @@ public class GameManager : MonoBehaviour
 
     [Header("BALL")]
     [SerializeField] Transform ballInitPos;
-    public GameObject  Ball => _ball;
+    [SerializeField] GameObject ballPrefab;
+
+    public GameObject Ball => _ball;
     GameObject _ball;
     Ball ballScript;
     bool isGameRunning;
-
+    [SerializeField] List<GameObject> _balls;
+    public List<GameObject> Balls => _balls;
+    [SerializeField] int maxBalls;
 
     [Header("PLAYER")]
     [SerializeField] Transform playerInitPos;
@@ -26,13 +31,13 @@ public class GameManager : MonoBehaviour
     GameObject[] Bricks;
     int bricksLeft;
 
+
     [Header("LIFE MANAGEMENT")]
     public int initLives;
-    int _lives;
     public int Lives => _lives;
+    int _lives;
 
     //UPGRADES MANAGEMENT
-    bool isUpgraded;
     List<GameObject> extraBalls = new List<GameObject>();
     public List<GameObject> ExtraBalls => extraBalls;
 
@@ -48,35 +53,22 @@ public class GameManager : MonoBehaviour
     {
         if (isGameRunning)
         {
-            ballScript.UpdateBall();
+            //ballScript.UpdateBall();
             playerScript.UpdatePlayer();
             bricksLeft = Bricks.Length;
             if (bricksLeft == 0) Win();
-            if (extraBalls.Count > 0) foreach (GameObject extraBall in extraBalls) extraBall.GetComponent<Ball>().UpdateBall();
+            //if (ball.Count > 0) foreach (GameObject extraBall in extraBalls) extraBall.GetComponent<Ball>().UpdateBall();
+            if (_balls.Count > 0) foreach (GameObject ball in _balls) ball.GetComponent<Ball>().UpdateBall();
+            else LoseRound();
         }
         else if (Input.GetKeyDown(KeyCode.Space)) StartGame();
     }
 
-
     void StartGame()
     {
+        CreateInitBall();
         isGameRunning = true;
-        ballScript.SetNewDirection();
-    }
-    void GetActors()
-    {
-        //Ball
-        _ball = GameObject.FindGameObjectWithTag("Ball");
-        ballInitPos = GameObject.Find("BallInitPos").GetComponent<Transform>();
-        ballScript = _ball.GetComponent<Ball>();
-
-        //Player
-        _player = GameObject.FindGameObjectWithTag("Player");
-        playerInitPos = GameObject.Find("PlayerInitPos").GetComponent<Transform>();
-        playerScript = _player.GetComponent<PlayerController>();
-
-        //Bricks
-        Bricks = GameObject.FindGameObjectsWithTag("Brick");
+        //ballScript.SetNewDirection();
     }
 
     void SetGame()
@@ -107,15 +99,42 @@ public class GameManager : MonoBehaviour
         SetGame();
     }
 
+    void GetActors()
+    {
+        //Ball
+        //_ball = GameObject.FindGameObjectWithTag("Ball");
+        //ballInitPos = GameObject.Find("BallInitPos").GetComponent<Transform>();
+        //ballScript = _ball.GetComponent<Ball>();
+
+        //Player
+        _player = GameObject.FindGameObjectWithTag("Player");
+        playerInitPos = GameObject.Find("PlayerInitPos").GetComponent<Transform>();
+        playerScript = _player.GetComponent<PlayerController>();
+
+        //Bricks
+        Bricks = GameObject.FindGameObjectsWithTag("Brick");
+    }
+
     public void RestartPositions()
     {
         isGameRunning = false;
-        _ball.transform.SetPositionAndRotation(ballInitPos.position, ballInitPos.rotation);
-        ballScript.SetNewDirection();
-        ballScript.RB.velocity = Vector2.zero;
-        foreach (GameObject extraBall in extraBalls) Destroy(extraBall);
-        extraBalls = new List<GameObject>();
+        //_ball.transform.SetPositionAndRotation(ballInitPos.position, ballInitPos.rotation);
+        //ballScript.SetNewDirection();
+        //ballScript.RB.velocity = Vector2.zero;
+        //foreach (GameObject extraBall in extraBalls) Destroy(extraBall);
+        //extraBalls = new List<GameObject>();
+
+
+        CreateInitBall();
+
 
         Player.transform.SetPositionAndRotation(playerInitPos.position, playerInitPos.rotation);
+    }
+
+    void CreateInitBall()
+    {
+        GameObject initBall = Instantiate(ballPrefab, ballInitPos.position, ballInitPos.rotation);
+        _balls.Add(initBall);
+        initBall.GetComponent<Ball>().SetNewDirection();
     }
 }

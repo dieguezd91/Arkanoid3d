@@ -20,8 +20,8 @@ public class Multiball : Upgrade
 
         for(int n = 0; n < ballsToSpawn; n++)
         {
-            GameObject newBall = Instantiate(ballPrefab, _ball.transform.position, _ball.transform.rotation);
-            GameManager.instance.ExtraBalls.Add(newBall);
+            GameObject newBall = Instantiate(ballPrefab, GameManager.instance.Balls[0].transform.position, GameManager.instance.Balls[0].transform.rotation);
+            GameManager.instance.Balls.Add(newBall);
             Ball newBallScript = newBall.GetComponent<Ball>();
             newBallScript.SetNewDirection();
         }

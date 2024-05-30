@@ -33,13 +33,21 @@ public class Ball : MonoBehaviour
         direction = direction.normalized; // Normalizar la dirección
     }
 
-    public void DestroyBall()
+    public void DestroyBall(GameObject ballToDestroy)
     {
-        if (tag == "ExtraBall")
-        {
-            GameManager.instance.ExtraBalls.Remove(gameObject);
-            Destroy(gameObject);
-        }
-        else if (tag == "Ball") GameManager.instance.LoseRound();
+
+
+
+        //if (tag == "ExtraBall")
+        //{
+        //    GameManager.instance.ExtraBalls.Remove(gameObject);
+        //    Destroy(gameObject);
+        //}
+        //else if (tag == "Ball") GameManager.instance.LoseRound();
+    }
+
+    private void OnDrawGizmosSelected()
+    {
+        Gizmos.DrawRay(transform.position, direction * speed);
     }
 }
