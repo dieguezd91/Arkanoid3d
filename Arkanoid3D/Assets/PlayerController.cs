@@ -1,24 +1,61 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
+    public float speedMovement = 10f;
+    public float xRange = 8f;
 
-    public float horizontalInput;
-    public float speedMovement;
-    public float xRange;
+    private float halfBarWidth;
+    private bool isBarExpanded = false;
+
+    private void Start()
+    {
+        halfBarWidth = GetComponent<Renderer>().bounds.size.x / 2;
+    }
+
+    void Update()
+    {
+        UpdatePlayer();
+    }
 
     public void UpdatePlayer()
     {
-        horizontalInput = Input.GetAxis("Horizontal");
+        float horizontalInput = Input.GetAxis("Horizontal");
 
-        transform.Translate(Vector3.right * horizontalInput * speedMovement * Time.deltaTime);
+        float currentXRange = xRange - halfBarWidth;
 
-        if (transform.position.x < -xRange)
-            transform.position = new Vector3(-xRange, transform.position.y, transform.position.z);
+        Vector3 newPosition = transform.position + Vector3.right * horizontalInput * speedMovement * Time.deltaTime;
 
-        if (transform.position.x > xRange)
-            transform.position = new Vector3(xRange, transform.position.y, transform.position.z);
+        newPosition.x = Mathf.Clamp(newPosition.x, -currentXRange, currentXRange);
+        transform.position = newPosition;
+    }
+
+    public void ExpandBar(float scaleFactor)
+    {
+        if (!isBarExpanded)
+        {
+            transform.localScale = new Vector3(transform.localScale.x * scaleFactor, transform.localScale.y, transform.localScale.z);
+
+            halfBarWidth = GetComponent<Renderer>().bounds.size.x / 2;
+
+            isBarExpanded = true;
+        }
+    }
+
+    public void ShrinkBar(float scaleFactor)
+    {
+        if (isBarExpanded)
+        {
+            transform.localScale = new Vector3(transform.localScale.x / scaleFactor, transform.localScale.y, transform.localScale.z);
+
+            halfBarWidth = GetComponent<Renderer>().bounds.size.x / 2;
+
+            isBarExpanded = false;
+        }
+    }
+
+    public bool IsBarExpanded()
+    {
+        return isBarExpanded;
     }
 }
