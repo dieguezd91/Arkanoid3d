@@ -125,9 +125,6 @@ public class GameManager : MonoBehaviour
         //extraBalls = new List<GameObject>();
 
 
-        CreateInitBall();
-
-
         Player.transform.SetPositionAndRotation(playerInitPos.position, playerInitPos.rotation);
     }
 

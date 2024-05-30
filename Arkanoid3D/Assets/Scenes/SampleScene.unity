@@ -235,8 +235,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ballInitPos: {fileID: 96023339}
   ballPrefab: {fileID: 843888646815367402, guid: ece0052089087a247828471bb60968e2, type: 3}
-  maxBalls: 0
   _balls: []
+  maxBalls: 20
   playerInitPos: {fileID: 1431433816}
   initLives: 3
 --- !u!4 &65110914
