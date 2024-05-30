@@ -5,21 +5,21 @@ using UnityEngine;
 
 public class Upgrade : MonoBehaviour
 {
-
     //TODO: APLICAR DIFERENTES VALORES DE CADA UPGRADE CON SCRIPTABLES
     [SerializeField] string upgradeName;
     [SerializeField] float speed;
     [SerializeField] float upgradeDuration;
     float _upgradeStartTime;
+    private bool _isUpgradeActive = false;
 
-    void Start()
+    public virtual void Start()
     {
         GetComponent<Rigidbody>().velocity = Vector3.back * speed;
     }
 
     private void Update()
     {
-        if (CheckUpgradeFinishTime()) EndUpgrade();
+        if (_isUpgradeActive && CheckUpgradeFinishTime()) EndUpgrade();
     }
 
     void OnTriggerEnter(Collider collision)
@@ -31,10 +31,12 @@ public class Upgrade : MonoBehaviour
     public virtual void ApplyUpgrade()
     {
         _upgradeStartTime = Time.time;
+        _isUpgradeActive = true;
         GetComponent<MeshRenderer>().enabled = false;
+        GetComponent<Collider>().enabled = false;
 
 #if UNITY_EDITOR
-            Debug.Log($"Upgrade started: {upgradeName}");
+        Debug.Log($"Upgrade started: {upgradeName}");
 #endif
     }
 
@@ -43,6 +45,7 @@ public class Upgrade : MonoBehaviour
 #if UNITY_EDITOR
         Debug.Log($"Upgrade ended: {upgradeName}");
 #endif
+        _isUpgradeActive = false;
         DestroyUpgrade();
     }
 
