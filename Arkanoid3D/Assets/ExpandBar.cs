@@ -1,35 +1,41 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
-public class ExpandBar : Upgrade
+public class ExpandBarUpgrade : Upgrade
 {
-    [SerializeField] float expandedScale = 2.0f;
-    private Transform playerTransform;
-    private Vector3 originalScale;
+    [SerializeField] private float expandedScale = 2.0f;
+    private PlayerController playerController;
 
     public override void ApplyUpgrade()
     {
+        GameObject player = GameObject.FindGameObjectWithTag("Player");
+        playerController = player.GetComponent<PlayerController>();
+
+        if (playerController.IsBarExpanded())
+        {
+#if UNITY_EDITOR
+            Debug.Log("Bar is already expanded. Upgrade ignored.");
+#endif
+            Destroy(gameObject);
+            return;
+        }
+
         base.ApplyUpgrade();
 
-        playerTransform = GameObject.FindGameObjectWithTag("Player").transform;
-        originalScale = playerTransform.localScale;
-
-        playerTransform.localScale = new Vector3(originalScale.x * expandedScale, originalScale.y, originalScale.z);
+        playerController.ExpandBar(expandedScale);
 
 #if UNITY_EDITOR
-        Debug.Log("Bar expanded");
+        Debug.Log("Bar expanded!");
 #endif
     }
 
     public override void EndUpgrade()
     {
-        if (playerTransform != null)
+        if (playerController != null)
         {
-            playerTransform.localScale = originalScale;
+            playerController.ShrinkBar(expandedScale);
 
 #if UNITY_EDITOR
-            Debug.Log("Bar restored to original size");
+            Debug.Log("Bar restored to original size.");
 #endif
         }
 
