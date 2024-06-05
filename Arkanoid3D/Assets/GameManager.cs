@@ -28,8 +28,8 @@ public class GameManager : MonoBehaviour
 
 
     [Header("BRICKS")]
-    GameObject[] Bricks;
-    int bricksLeft;
+    [SerializeField] public GameObject[] Bricks;
+    [SerializeField] public int bricksLeft;
 
 
     [Header("LIFE MANAGEMENT")]
@@ -47,17 +47,15 @@ public class GameManager : MonoBehaviour
         else Destroy(gameObject);
 
         GetActors();
+        bricksLeft = Bricks.Length;
     }
 
     void Update()
     {
         if (isGameRunning)
         {
-            //ballScript.UpdateBall();
             playerScript.UpdatePlayer();
-            bricksLeft = Bricks.Length;
             if (bricksLeft == 0) Win();
-            //if (ball.Count > 0) foreach (GameObject extraBall in extraBalls) extraBall.GetComponent<Ball>().UpdateBall();
             if (_balls.Count > 0) foreach (GameObject ball in _balls) ball.GetComponent<Ball>().UpdateBall();
             else LoseRound();
         }
@@ -68,7 +66,6 @@ public class GameManager : MonoBehaviour
     {
         CreateInitBall();
         isGameRunning = true;
-        //ballScript.SetNewDirection();
     }
 
     void SetGame()
@@ -101,11 +98,6 @@ public class GameManager : MonoBehaviour
 
     void GetActors()
     {
-        //Ball
-        //_ball = GameObject.FindGameObjectWithTag("Ball");
-        //ballInitPos = GameObject.Find("BallInitPos").GetComponent<Transform>();
-        //ballScript = _ball.GetComponent<Ball>();
-
         //Player
         _player = GameObject.FindGameObjectWithTag("Player");
         playerInitPos = GameObject.Find("PlayerInitPos").GetComponent<Transform>();
@@ -118,12 +110,6 @@ public class GameManager : MonoBehaviour
     public void RestartPositions()
     {
         isGameRunning = false;
-        //_ball.transform.SetPositionAndRotation(ballInitPos.position, ballInitPos.rotation);
-        //ballScript.SetNewDirection();
-        //ballScript.RB.velocity = Vector2.zero;
-        //foreach (GameObject extraBall in extraBalls) Destroy(extraBall);
-        //extraBalls = new List<GameObject>();
-
 
         Player.transform.SetPositionAndRotation(playerInitPos.position, playerInitPos.rotation);
     }

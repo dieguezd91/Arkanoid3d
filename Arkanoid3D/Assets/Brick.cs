@@ -9,6 +9,7 @@ public class Brick : MonoBehaviour
     MeshRenderer _renderer;
     string materialName;
     [SerializeField] GameObject[] _upgrades;
+    private bool isDestroyed = false;
 
     private void Start()
     {
@@ -28,7 +29,7 @@ public class Brick : MonoBehaviour
                 HP = 1;
                 break;
             default:
-                HP = 1; // Valor predeterminado si el material no coincide con ninguno de los casos anteriores
+                HP = 1;
                 break;
         }
     }
@@ -40,13 +41,18 @@ public class Brick : MonoBehaviour
 
     void TakeDamage()
     {
-        HP--; // Reducir los puntos de vida
-        if (HP <= 0) DestroyBrick();
+        HP--;
+        if (HP <= 0 && !isDestroyed)
+        {
+            isDestroyed = true;
+            DestroyBrick();
+        }
     }
 
     private void DestroyBrick()
     {
         TrySpawnUpgrade();
+        GameManager.instance.bricksLeft--;
         Destroy(gameObject, .3f);
     }
 
