@@ -13,11 +13,6 @@ public class PlayerController : MonoBehaviour
         halfBarWidth = GetComponent<Renderer>().bounds.size.x / 2;
     }
 
-    void Update()
-    {
-        UpdatePlayer();
-    }
-
     public void UpdatePlayer()
     {
         float horizontalInput = Input.GetAxis("Horizontal");
