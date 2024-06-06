@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
 using Unity.VisualScripting;
 using UnityEngine;
 
@@ -9,7 +10,9 @@ public class GameManager : MonoBehaviour
     public static GameManager instance;
     public UIManager UIManager => uiManager;
     [SerializeField] UIManager uiManager;
-
+    GameState _currentState;
+    float _elapsedTime;
+    public float ElapsedTime => _elapsedTime;
 
     [Header("BALL")]
     [SerializeField] public Transform ballInitPos;
@@ -37,24 +40,57 @@ public class GameManager : MonoBehaviour
 
     private void Start()
     {
-        if (instance == null) instance = this;
-        else Destroy(gameObject);
+        instance = this;
 
         GetActors();
-        bricksLeft = Bricks.Length;
+        uiManager.Initialize();
     }
 
     void Update()
     {
-        if (isGameRunning)
+        if (_currentState == GameState.Playing)
         {
-            playerScript.UpdatePlayer();
-            if (bricksLeft == 0) Win();
-            if (_balls.Count > 0) foreach (GameObject ball in _balls) ball.GetComponent<Ball>().UpdateBall();
-            else LoseRound();
-            if (Input.GetKeyDown(KeyCode.Escape)) uiManager.Pause();
+            _elapsedTime += Time.deltaTime;
+            if (isGameRunning)
+            {
+                playerScript.UpdatePlayer();
+                if (bricksLeft == 0) Win();
+                if (_balls.Count > 0) foreach (GameObject ball in _balls) ball.GetComponent<Ball>().UpdateBall();
+                else LoseRound();
+                if (Input.GetKeyDown(KeyCode.Escape)) Pause();
+            }
+            else if (Input.GetKeyDown(KeyCode.Space)) StartGame();
+            uiManager.UpdateHUD();
         }
-        else if (Input.GetKeyDown(KeyCode.Space)) StartGame();
+        else if (_currentState == GameState.Paused) if(Input.GetKeyDown(KeyCode.Escape)) Play();
+    }
+
+    public void Play()
+    {
+        Time.timeScale = 1;
+        _currentState = GameState.Playing;
+        uiManager.PlayUI();
+    }
+
+    public void Pause()
+    {
+        _currentState = GameState.Paused;
+        Time.timeScale = 0;
+        uiManager.Pause();
+    }
+
+    public void MainMenu()
+    {
+        isGameRunning = false;
+        _elapsedTime = 0;
+        _currentState = GameState.MainMenu;
+        uiManager.MainMenuUI();
+    }
+
+    public void LoadGame()
+    {
+        SetGame();
+        Play();
     }
 
     void StartGame()
@@ -67,31 +103,22 @@ public class GameManager : MonoBehaviour
     void SetGame()
     {
         RestartPositions();
-
         _lives = initLives;
-        Debug.Log("Game Set");
     }
 
-    void Win()
-    {
-        Debug.Log("You won");
-        SetGame();
-    }
     public void LoseRound()
     {
         if (_lives > 0)
         {
-            Debug.Log("You lost");
             RestartPositions();
             _lives--;
         }
-        else EndGame();
+        else Lose();
     }
-    void EndGame()
-    {
-        Debug.Log("Game lost");
-        SetGame();
-    }
+
+    void Win() => MainMenu();
+
+    void Lose() => MainMenu();
 
     void GetActors()
     {
@@ -102,13 +129,14 @@ public class GameManager : MonoBehaviour
 
         //Bricks
         Bricks = GameObject.FindGameObjectsWithTag("Brick");
+        bricksLeft = Bricks.Length;
     }
 
     public void RestartPositions()
     {
         isGameRunning = false;
-
         Player.transform.SetPositionAndRotation(playerInitPos.position, playerInitPos.rotation);
+        _balls.Clear();
     }
 
     void CreateInitBall()
@@ -120,12 +148,5 @@ public class GameManager : MonoBehaviour
         initBall.GetComponent<Ball>().SetNewDirection();
     }
 
-    public void QuitGame()
-    {
-        Application.Quit();
-
-#if UNITY_EDITOR
-        Debug.Log("Quit");
-#endif
-    }
+    public void QuitGame() => Application.Quit();
 }

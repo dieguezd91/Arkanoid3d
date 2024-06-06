@@ -1,47 +1,57 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 using UnityEngine.Video;
 
 public class UIManager : MonoBehaviour
 {
+    GameManager gameManager;
+    VideoPlayer bgVideo;
+    [Header("UI COMPONENTS")]
     [SerializeField] GameObject _pauseMenu;
     [SerializeField] GameObject _mainMenu;
     [SerializeField] GameObject _hud;
-    GameManager gameManager;
-    VideoPlayer bgVideo;
+
+    [Header("HUD COMPONENTS")]
+    [SerializeField] RectTransform _lives;
+    [SerializeField] TextMeshProUGUI _timer;
 
     public void Initialize()
     {
         gameManager = GameManager.instance;
+        bgVideo = GetComponentInChildren<VideoPlayer>();
         bgVideo.targetCamera = Camera.main;
-        MainMenu();
+        MainMenuUI();
     }
 
     public void Pause()
     {
-        Time.timeScale = 0;
         _pauseMenu.SetActive(true);
         _hud.SetActive(false);
     }
 
-    public void Play()
+    public void PlayUI()
     {
-        Time.timeScale = 1;
         _pauseMenu.SetActive(false);
         _mainMenu.SetActive(false);
         _hud.SetActive(true);
     }
-    public void MainMenu()
+
+    public void MainMenuUI()
     {
         _mainMenu.SetActive(true);
         _pauseMenu.SetActive(false);
     }
 
-    public void Quit()
+    public void UpdateHUD()
     {
-        GameManager.instance.QuitGame();
-    }
+        //TIMER
+        int minutes = Mathf.FloorToInt(gameManager.ElapsedTime / 60);
+        int seconds = Mathf.FloorToInt(gameManager.ElapsedTime % 60);
+        _timer.text = string.Format("{0:00}:{1:00}", minutes, seconds);
 
-    public void UpdateHUD() { }
+        _lives.rect.Set(_lives.rect.x, _lives.rect.y, 100 * gameManager.Lives, _lives.rect.y);
+    }
 }
