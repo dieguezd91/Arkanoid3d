@@ -25,10 +25,9 @@ public class Ball : MonoBehaviour
     {
         _rb.velocity = direction * speed;
         MagnetLogic();
-        //transform.Translate(direction * speed * Time.deltaTime);                // Mover la pelota en su dirección a la velocidad especificada
     }
 
-    public void SetNewDirection() => direction = new Vector3(Random.Range(-1f, 1f), 0f, 1f).normalized;
+    public void SetNewDirection() => direction = new Vector3(Random.Range(-1f, 1f), .15f, 1).normalized;
 
     private void OnCollisionEnter(Collision collision)
     {
@@ -46,7 +45,7 @@ public class Ball : MonoBehaviour
 
         if (collision.gameObject.tag == "DeadZone")
         {
-            GameManager.instance.Balls.Remove(gameObject);
+            GameManager.instance.Balls.Remove(this);
             gameObject.SetActive(false);
         }
     }

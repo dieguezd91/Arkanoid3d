@@ -10,9 +10,8 @@ public class DeadZone : MonoBehaviour
     {
         if (other.gameObject.layer == 6)
         {
-            GameObject go = other.gameObject;
-            GameManager.instance.Balls.Remove(go);
-            go.SetActive(false);
+            GameManager.instance.Balls.Remove(other.gameObject.GetComponent<Ball>());
+            other.gameObject.SetActive(false);
         }
     }
 }

@@ -13,9 +13,6 @@ public class UIManager : MonoBehaviour
     [SerializeField] GameObject _pauseMenu;
     [SerializeField] GameObject _mainMenu;
     [SerializeField] GameObject _hud;
-
-    [Header("HUD COMPONENTS")]
-    [SerializeField] RectTransform _lives;
     [SerializeField] TextMeshProUGUI _timer;
 
     public void Initialize()
@@ -43,6 +40,7 @@ public class UIManager : MonoBehaviour
     {
         _mainMenu.SetActive(true);
         _pauseMenu.SetActive(false);
+        _hud.SetActive(false);
     }
 
     public void UpdateHUD()
@@ -51,7 +49,5 @@ public class UIManager : MonoBehaviour
         int minutes = Mathf.FloorToInt(gameManager.ElapsedTime / 60);
         int seconds = Mathf.FloorToInt(gameManager.ElapsedTime % 60);
         _timer.text = string.Format("{0:00}:{1:00}", minutes, seconds);
-
-        _lives.rect.Set(_lives.rect.x, _lives.rect.y, 100 * gameManager.Lives, _lives.rect.y);
     }
 }

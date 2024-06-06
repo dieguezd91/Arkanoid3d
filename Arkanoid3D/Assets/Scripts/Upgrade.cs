@@ -5,21 +5,23 @@ using UnityEngine;
 
 public class Upgrade : MonoBehaviour
 {
-    //TODO: APLICAR DIFERENTES VALORES DE CADA UPGRADE CON SCRIPTABLES
     [SerializeField] string upgradeName;
     [SerializeField] float speed;
     [SerializeField] float upgradeDuration;
     float _upgradeStartTime;
     private bool _isUpgradeActive = false;
+    Rigidbody _rb;
 
     public virtual void Start()
     {
-        GetComponent<Rigidbody>().velocity = Vector3.back * speed;
+        _rb = GetComponent<Rigidbody>();
+        GameManager.instance.Upgrades.Add(this);
     }
 
-    private void Update()
+    public void UpdateUpgrade()
     {
-        if (_isUpgradeActive && CheckUpgradeFinishTime()) EndUpgrade();
+        if(!_isUpgradeActive) _rb.velocity = Vector3.back * speed;
+        else if(_isUpgradeActive && CheckUpgradeFinishTime()) EndUpgrade();
     }
 
     void OnTriggerEnter(Collider collision)
@@ -34,22 +36,19 @@ public class Upgrade : MonoBehaviour
         _isUpgradeActive = true;
         GetComponent<MeshRenderer>().enabled = false;
         GetComponent<Collider>().enabled = false;
-
-#if UNITY_EDITOR
-        Debug.Log($"Upgrade started: {upgradeName}");
-#endif
     }
 
     public virtual void EndUpgrade()
     {
-#if UNITY_EDITOR
-        Debug.Log($"Upgrade ended: {upgradeName}");
-#endif
         _isUpgradeActive = false;
         DestroyUpgrade();
     }
 
     bool CheckUpgradeFinishTime() => _upgradeStartTime != 0 && Time.time >= _upgradeStartTime + upgradeDuration;
 
-    public void DestroyUpgrade() => Destroy(gameObject);
+    public void DestroyUpgrade()
+    {
+        GameManager.instance.Upgrades.Remove(this);
+        Destroy(gameObject);
+    }
 }

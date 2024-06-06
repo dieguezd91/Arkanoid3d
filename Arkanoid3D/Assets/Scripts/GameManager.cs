@@ -13,13 +13,12 @@ public class GameManager : MonoBehaviour
     GameState _currentState;
     float _elapsedTime;
     public float ElapsedTime => _elapsedTime;
+    public bool isGameRunning;
 
     [Header("BALL")]
     [SerializeField] public Transform ballInitPos;
-
-    public bool isGameRunning;
-    [SerializeField] List<GameObject> _balls;
-    public List<GameObject> Balls => _balls;
+    [SerializeField] List<Ball> _balls;
+    public List<Ball> Balls => _balls;
 
     [Header("PLAYER")]
     [SerializeField] Transform playerInitPos;
@@ -27,11 +26,13 @@ public class GameManager : MonoBehaviour
     GameObject _player;
     PlayerController playerScript;
 
-
     [Header("BRICKS")]
     [SerializeField] public GameObject[] Bricks;
     [SerializeField] public int bricksLeft;
 
+    //Upgrades
+    public List<Upgrade> Upgrades => _upgrades;
+    List<Upgrade> _upgrades;
 
     [Header("LIFE MANAGEMENT")]
     public int initLives;
@@ -55,7 +56,8 @@ public class GameManager : MonoBehaviour
             {
                 playerScript.UpdatePlayer();
                 if (bricksLeft == 0) Win();
-                if (_balls.Count > 0) foreach (GameObject ball in _balls) ball.GetComponent<Ball>().UpdateBall();
+                if(_upgrades.Count > 0) foreach(Upgrade upgrade in _upgrades) upgrade.UpdateUpgrade();
+                if (_balls.Count > 0) foreach(Ball ball in _balls) ball.UpdateBall();
                 else LoseRound();
                 if (Input.GetKeyDown(KeyCode.Escape)) Pause();
             }
@@ -130,22 +132,30 @@ public class GameManager : MonoBehaviour
         //Bricks
         Bricks = GameObject.FindGameObjectsWithTag("Brick");
         bricksLeft = Bricks.Length;
+
+        //Upgrades
+        _upgrades = new List<Upgrade>();
     }
 
     public void RestartPositions()
     {
         isGameRunning = false;
         Player.transform.SetPositionAndRotation(playerInitPos.position, playerInitPos.rotation);
+
+        foreach (Ball ball in _balls) Destroy(ball);
         _balls.Clear();
+
+        foreach (Upgrade upgrade in _upgrades) Destroy(upgrade);
+        _upgrades.Clear();
     }
 
     void CreateInitBall()
     {
-        GameObject initBall = BallPool.instance.RequestBall();
-        initBall.SetActive(true);
+        Ball initBall = BallPool.instance.RequestBall().GetComponent<Ball>();
+        initBall.gameObject.SetActive(true);
         initBall.transform.position = ballInitPos.position;
         _balls.Add(initBall);
-        initBall.GetComponent<Ball>().SetNewDirection();
+        initBall.SetNewDirection();
     }
 
     public void QuitGame() => Application.Quit();
