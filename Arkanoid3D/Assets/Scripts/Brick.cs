@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using Unity.VisualScripting;
 using UnityEngine;
 
@@ -62,14 +63,5 @@ public class Brick : MonoBehaviour
         if (n < 3) Instantiate(CreateUpgrade(), transform.position, transform.rotation);
     }
 
-    GameObject CreateUpgrade()
-    {
-        GameObject newUpgrade;
-        int r = Random.Range(0, 100);
-        if (r > 75) newUpgrade = _upgrades[0];
-        else if (r > 50) newUpgrade = _upgrades[1];
-        else if (r > 25) newUpgrade = _upgrades[2];
-        else newUpgrade = _upgrades[3];
-        return newUpgrade;
-    }
+    GameObject CreateUpgrade() => _upgrades[Random.Range(0, _upgrades.Length)];
 }

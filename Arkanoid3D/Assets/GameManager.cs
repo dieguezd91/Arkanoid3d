@@ -7,6 +7,9 @@ using UnityEngine;
 public class GameManager : MonoBehaviour
 {
     public static GameManager instance;
+    public UIManager UIManager => uiManager;
+    [SerializeField] UIManager uiManager;
+
 
     [Header("BALL")]
     [SerializeField] public Transform ballInitPos;
@@ -49,6 +52,7 @@ public class GameManager : MonoBehaviour
             if (bricksLeft == 0) Win();
             if (_balls.Count > 0) foreach (GameObject ball in _balls) ball.GetComponent<Ball>().UpdateBall();
             else LoseRound();
+            if (Input.GetKeyDown(KeyCode.Escape)) uiManager.Pause();
         }
         else if (Input.GetKeyDown(KeyCode.Space)) StartGame();
     }
