@@ -9,16 +9,11 @@ public class GameManager : MonoBehaviour
     public static GameManager instance;
 
     [Header("BALL")]
-    [SerializeField] Transform ballInitPos;
-    [SerializeField] GameObject ballPrefab;
+    [SerializeField] public Transform ballInitPos;
 
-    public GameObject Ball => _ball;
-    GameObject _ball;
-    Ball ballScript;
-    bool isGameRunning;
+    public bool isGameRunning;
     [SerializeField] List<GameObject> _balls;
     public List<GameObject> Balls => _balls;
-    [SerializeField] int maxBalls;
 
     [Header("PLAYER")]
     [SerializeField] Transform playerInitPos;
@@ -36,10 +31,6 @@ public class GameManager : MonoBehaviour
     public int initLives;
     public int Lives => _lives;
     int _lives;
-
-    //UPGRADES MANAGEMENT
-    List<GameObject> extraBalls = new List<GameObject>();
-    public List<GameObject> ExtraBalls => extraBalls;
 
     private void Start()
     {
@@ -66,6 +57,7 @@ public class GameManager : MonoBehaviour
 
     void StartGame()
     {
+        BallPool.instance.AddBallsToPool(BallPool.instance.poolsize);
         CreateInitBall();
         isGameRunning = true;
         //ballScript.SetNewDirection();
@@ -74,6 +66,7 @@ public class GameManager : MonoBehaviour
     void SetGame()
     {
         RestartPositions();
+
         _lives = initLives;
         Debug.Log("Game Set");
     }
@@ -130,7 +123,9 @@ public class GameManager : MonoBehaviour
 
     void CreateInitBall()
     {
-        GameObject initBall = Instantiate(ballPrefab, ballInitPos.position, ballInitPos.rotation);
+        GameObject initBall = BallPool.instance.RequestBall();
+        initBall.SetActive(true);
+        initBall.transform.position = ballInitPos.position;
         _balls.Add(initBall);
         initBall.GetComponent<Ball>().SetNewDirection();
     }

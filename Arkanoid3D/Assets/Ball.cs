@@ -31,19 +31,12 @@ public class Ball : MonoBehaviour
         direction = Vector3.Reflect(direction, collision.contacts[0].normal);
         direction.y = 0f; // Mantener la dirección en el eje Y en 0 para evitar movimientos verticales
         direction = direction.normalized; // Normalizar la dirección
-    }
 
-    public void DestroyBall(GameObject ballToDestroy)
-    {
-
-
-
-        //if (tag == "ExtraBall")
-        //{
-        //    GameManager.instance.ExtraBalls.Remove(gameObject);
-        //    Destroy(gameObject);
-        //}
-        //else if (tag == "Ball") GameManager.instance.LoseRound();
+        if (collision.gameObject.tag == "DeadZone")
+        {
+            GameManager.instance.Balls.Remove(gameObject);
+            gameObject.SetActive(false);
+        }
     }
 
     private void OnDrawGizmosSelected()

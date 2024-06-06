@@ -234,10 +234,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ballInitPos: {fileID: 96023339}
-  ballPrefab: {fileID: 843888646815367402, guid: ece0052089087a247828471bb60968e2, type: 3}
+  isGameRunning: 0
   _balls: []
-  maxBalls: 20
   playerInitPos: {fileID: 1431433816}
+  Bricks: []
+  bricksLeft: 0
   initLives: 3
 --- !u!4 &65110914
 Transform:
@@ -1039,6 +1040,53 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 90, y: 0, z: 0}
+--- !u!1 &740689969
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 740689971}
+  - component: {fileID: 740689970}
+  m_Layer: 0
+  m_Name: BallPool
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &740689970
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 740689969}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8a82ac7b2a6878c469edf475c43c2a7e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ballPrefab: {fileID: 843888646815367402, guid: ece0052089087a247828471bb60968e2, type: 3}
+  ballList: []
+  poolsize: 20
+--- !u!4 &740689971
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 740689969}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0.37602288, y: 15.669563, z: -6.218689}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &740770553 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 8850522008126556988, guid: 9c562708ed4153e46883cbd852783214, type: 3}
@@ -2029,7 +2077,6 @@ GameObject:
   - component: {fileID: 2061185851}
   - component: {fileID: 2061185850}
   - component: {fileID: 2061185852}
-  - component: {fileID: 2061185853}
   m_Layer: 0
   m_Name: DeadZone
   m_TagString: DeadZone
@@ -2123,21 +2170,6 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &2061185853
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2061185847}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e469dce642dab2e4a95698911bce4bd0, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  ballsLayer:
-    serializedVersion: 2
-    m_Bits: 64
 --- !u!4 &2066291095 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 8850522008126556988, guid: 9c562708ed4153e46883cbd852783214, type: 3}
@@ -6276,3 +6308,4 @@ SceneRoots:
   - {fileID: 65110914}
   - {fileID: 96023339}
   - {fileID: 1431433816}
+  - {fileID: 740689971}
