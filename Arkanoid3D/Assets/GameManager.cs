@@ -134,4 +134,13 @@ public class GameManager : MonoBehaviour
         _balls.Add(initBall);
         initBall.GetComponent<Ball>().SetNewDirection();
     }
+
+    public void QuitGame()
+    {
+        Application.Quit();
+
+#if UNITY_EDITOR
+        Debug.Log("Quit");
+#endif
+    }
 }
