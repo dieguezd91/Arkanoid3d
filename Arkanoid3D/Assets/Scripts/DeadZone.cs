@@ -12,8 +12,7 @@ public class DeadZone : MonoBehaviour
         {
             GameObject go = other.gameObject;
             GameManager.instance.Balls.Remove(go);
-            Destroy(go);
+            go.SetActive(false);
         }
-
     }
 }
