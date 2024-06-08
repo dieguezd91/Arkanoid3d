@@ -49,8 +49,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   upgradeName: ExpandBar
-  speed: 3
+  speed: 4
   upgradeDuration: 10
+  _rb: {fileID: 6046944644521875004}
   expandedScale: 2
 --- !u!33 &2020837085695627191
 MeshFilter:

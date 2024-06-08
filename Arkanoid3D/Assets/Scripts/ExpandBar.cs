@@ -7,8 +7,7 @@ public class ExpandBarUpgrade : Upgrade
 
     public override void ApplyUpgrade()
     {
-        GameObject player = GameObject.FindGameObjectWithTag("Player");
-        playerController = player.GetComponent<PlayerController>();
+        playerController = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerController>();
 
         if (playerController.IsBarExpanded())
         {
@@ -19,10 +18,9 @@ public class ExpandBarUpgrade : Upgrade
             return;
         }
 
+
         base.ApplyUpgrade();
-
         playerController.ExpandBar(expandedScale);
-
 #if UNITY_EDITOR
         Debug.Log("Bar expanded!");
 #endif

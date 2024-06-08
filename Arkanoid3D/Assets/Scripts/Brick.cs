@@ -60,7 +60,11 @@ public class Brick : MonoBehaviour
     private void TrySpawnUpgrade()
     {
         int n = Random.Range(0, 10);
-        if (n < 3) Instantiate(CreateUpgrade(), transform.position, transform.rotation);
+        if (n < 3)
+        {
+            GameObject newUpgrade = Instantiate(CreateUpgrade(), transform.position, transform.rotation);
+            GameManager.instance.Upgrades.Add(newUpgrade.GetComponent<Upgrade>());
+        }
     }
 
     GameObject CreateUpgrade() => _upgrades[Random.Range(0, _upgrades.Length)];

@@ -122,8 +122,8 @@ MonoBehaviour:
   upgradeName: Multiball
   speed: 4
   upgradeDuration: 1
+  _rb: {fileID: 1451597161527578473}
   ballsToSpawn: 4
-  ballPrefab: {fileID: 843888646815367402, guid: ece0052089087a247828471bb60968e2, type: 3}
 --- !u!54 &1451597161527578473
 Rigidbody:
   m_ObjectHideFlags: 0

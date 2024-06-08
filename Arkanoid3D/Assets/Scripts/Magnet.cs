@@ -7,8 +7,7 @@ public class Magnet : Upgrade
     private Ball _ball;
     public override void ApplyUpgrade()
     {
-        GameObject ball = GameObject.FindGameObjectWithTag("Ball");
-        _ball = ball.GetComponent<Ball>();
+        _ball = GameObject.FindGameObjectWithTag("Ball").GetComponent<Ball>();
 
         if (_ball.isMagnetEnabled())
         {
@@ -24,8 +23,8 @@ public class Magnet : Upgrade
     }
     public override void EndUpgrade()
     {
-        base.EndUpgrade();
         _ball.DisableMagnet();
+        base.EndUpgrade();
         Debug.Log("Magnet disabled");
     }
 }

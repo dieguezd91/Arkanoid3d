@@ -148,4 +148,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   upgradeName: Magnet
   speed: 4
-  upgradeDuration: 5
+  upgradeDuration: 10
+  _rb: {fileID: 1451597161527578473}
