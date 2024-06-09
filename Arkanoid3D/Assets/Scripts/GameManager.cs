@@ -12,9 +12,12 @@ public class GameManager : MonoBehaviour
     public float ElapsedTime => _elapsedTime;
     public bool isGameRunning;
 
-    [Header("BALL")]
+    [Header("BALLS")]
     [SerializeField] public Transform ballInitPos;
     [SerializeField] List<Ball> _balls;
+    [SerializeField] GameObject ballprefab;
+    [SerializeField] int maxBalls;
+    GenericPool<Ball> _ballPool;
     public List<Ball> Balls => _balls;
 
     [Header("PLAYER")]
@@ -55,20 +58,12 @@ public class GameManager : MonoBehaviour
                 if (bricksLeft == 0) Win();
 
                 if (_upgrades.Count > 0)
-                {
                     for (int i = _upgrades.Count - 1; i >= 0; i--)
-                    {
-                        _upgrades[i].UpdateUpgrade();
-                    }
-                }
+                        _upgrades[i].UpdateUpgrade(); 
 
                 if (_balls.Count > 0)
-                {
                     for (int i = _balls.Count - 1; i >= 0; i--)
-                    {
-                        _balls[i].UpdateBall();
-                    }
-                }
+                        _balls[i].UpdateBall(); 
                 else LoseRound();
 
                 if (Input.GetKeyDown(KeyCode.Escape)) Pause();
@@ -78,9 +73,7 @@ public class GameManager : MonoBehaviour
             uiManager.UpdateHUD();
         }
         else if (_currentState == GameState.Paused)
-        {
-            if (Input.GetKeyDown(KeyCode.Escape)) Play();
-        }
+            if (Input.GetKeyDown(KeyCode.Escape)) Play(); 
     }
 
     public void Play()
@@ -114,7 +107,7 @@ public class GameManager : MonoBehaviour
     void StartGame()
     {
         _elapsedTime = 0; // Reiniciar el tiempo transcurrido al inicio del juego
-        BallPool.instance.AddBallsToPool(BallPool.instance.poolsize);
+        _ballPool = new GenericPool<Ball>(ballprefab, maxBalls);
         CreateInitBall();
         isGameRunning = true;
     }
@@ -168,7 +161,7 @@ public class GameManager : MonoBehaviour
 
     void CreateInitBall()
     {
-        Ball initBall = BallPool.instance.RequestBall().GetComponent<Ball>();
+        Ball initBall = _ballPool.RequestItem().GetComponent<Ball>();
         initBall.gameObject.SetActive(true);
         initBall.transform.position = ballInitPos.position;
         _balls.Add(initBall);

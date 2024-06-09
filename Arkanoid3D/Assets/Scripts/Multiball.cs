@@ -12,7 +12,7 @@ public class Multiball : Upgrade
 
         for(int n = 0; n < ballsToSpawn; n++)
         {
-            Ball newBall = BallPool.instance.RequestBall().GetComponent<Ball>();
+            Ball newBall = GenericPool.instance.RequestBall().GetComponent<Ball>();
             newBall.transform.position = GameManager.instance.Balls[0].transform.position;
             GameManager.instance.Balls.Add(newBall);
             newBall.SetNewDirection();

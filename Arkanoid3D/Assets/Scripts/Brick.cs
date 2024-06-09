@@ -1,7 +1,4 @@
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
-using Unity.VisualScripting;
+using System;
 using UnityEngine;
 
 public class Brick : MonoBehaviour
@@ -54,12 +51,12 @@ public class Brick : MonoBehaviour
     {
         TrySpawnUpgrade();
         GameManager.instance.bricksLeft--;
-        Destroy(gameObject, .3f);
+        Destroy(gameObject);
     }
 
     private void TrySpawnUpgrade()
     {
-        int n = Random.Range(0, 10);
+        int n = UnityEngine.Random.Range(0, 10);
         if (n < 3)
         {
             GameObject newUpgrade = Instantiate(CreateUpgrade(), transform.position, transform.rotation);
@@ -67,5 +64,5 @@ public class Brick : MonoBehaviour
         }
     }
 
-    GameObject CreateUpgrade() => _upgrades[Random.Range(0, _upgrades.Length)];
+    GameObject CreateUpgrade() => _upgrades[UnityEngine.Random.Range(0, _upgrades.Length)];
 }
