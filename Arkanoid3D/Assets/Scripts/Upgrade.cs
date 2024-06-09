@@ -1,6 +1,5 @@
 using System.Collections;
 using System.Collections.Generic;
-using UnityEditor;
 using UnityEngine;
 
 public class Upgrade : MonoBehaviour
@@ -20,8 +19,15 @@ public class Upgrade : MonoBehaviour
 
     public void UpdateUpgrade()
     {
-        if(!_isUpgradeActive) _rb.velocity = Vector3.back * speed;
-        else if(_isUpgradeActive && CheckUpgradeFinishTime()) EndUpgrade();
+        if (!_isUpgradeActive)
+        {
+            if (_rb != null)
+            {
+                Debug.Log(_rb);
+                _rb.velocity = Vector3.back * speed;
+            }
+        }
+        else if (CheckUpgradeFinishTime()) EndUpgrade();
     }
 
     void OnTriggerEnter(Collider collision)
