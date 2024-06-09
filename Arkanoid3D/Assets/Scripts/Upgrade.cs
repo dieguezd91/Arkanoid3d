@@ -1,6 +1,5 @@
 using System.Collections;
 using System.Collections.Generic;
-using UnityEditor;
 using UnityEngine;
 
 public class Upgrade : MonoBehaviour
@@ -10,22 +9,31 @@ public class Upgrade : MonoBehaviour
     [SerializeField] float upgradeDuration;
     float _upgradeStartTime;
     private bool _isUpgradeActive = false;
-    [SerializeField] Rigidbody _rb;
+    Rigidbody _rb;
+
+    public virtual void Start()
+    {
+        _rb = GetComponent<Rigidbody>();
+        GameManager.instance.Upgrades.Add(this);
+    }
 
     public void UpdateUpgrade()
     {
-        if(!_isUpgradeActive)
+        if (!_isUpgradeActive)
         {
-            Debug.Log(_rb);
-            _rb.velocity = Vector3.back * speed;
+            if (_rb != null)
+            {
+                Debug.Log(_rb);
+                _rb.velocity = Vector3.back * speed;
+            }
         }
-        else if(CheckUpgradeFinishTime()) EndUpgrade();
+        else if (CheckUpgradeFinishTime()) EndUpgrade();
     }
 
     void OnTriggerEnter(Collider collision)
     {
         if (collision.gameObject.CompareTag("Player")) ApplyUpgrade();
-        else if (!_isUpgradeActive && collision.gameObject.CompareTag("DeadZone")) DestroyUpgrade();
+        else if (collision.gameObject.CompareTag("DeadZone")) DestroyUpgrade();
     }
 
     public virtual void ApplyUpgrade()
@@ -39,10 +47,10 @@ public class Upgrade : MonoBehaviour
     public virtual void EndUpgrade()
     {
         _isUpgradeActive = false;
-        //DestroyUpgrade();
+        DestroyUpgrade();
     }
 
-    bool CheckUpgradeFinishTime() => _isUpgradeActive && Time.time >= _upgradeStartTime + upgradeDuration;
+    bool CheckUpgradeFinishTime() => _upgradeStartTime != 0 && Time.time >= _upgradeStartTime + upgradeDuration;
 
     public void DestroyUpgrade()
     {

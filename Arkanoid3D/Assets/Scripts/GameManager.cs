@@ -1,8 +1,5 @@
 using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text.RegularExpressions;
-using Unity.VisualScripting;
 using UnityEngine;
 
 public class GameManager : MonoBehaviour
@@ -51,20 +48,39 @@ public class GameManager : MonoBehaviour
     {
         if (_currentState == GameState.Playing)
         {
-            _elapsedTime += Time.deltaTime;
             if (isGameRunning)
             {
+                _elapsedTime += Time.deltaTime;
                 playerScript.UpdatePlayer();
                 if (bricksLeft == 0) Win();
-                if(_upgrades.Count > 0) foreach(Upgrade upgrade in _upgrades) upgrade.UpdateUpgrade();
-                if (_balls.Count > 0) foreach(Ball ball in _balls) ball.UpdateBall();
+
+                if (_upgrades.Count > 0)
+                {
+                    for (int i = _upgrades.Count - 1; i >= 0; i--)
+                    {
+                        _upgrades[i].UpdateUpgrade();
+                    }
+                }
+
+                if (_balls.Count > 0)
+                {
+                    for (int i = _balls.Count - 1; i >= 0; i--)
+                    {
+                        _balls[i].UpdateBall();
+                    }
+                }
                 else LoseRound();
+
                 if (Input.GetKeyDown(KeyCode.Escape)) Pause();
             }
             else if (Input.GetKeyDown(KeyCode.Space)) StartGame();
+
             uiManager.UpdateHUD();
         }
-        else if (_currentState == GameState.Paused) if(Input.GetKeyDown(KeyCode.Escape)) Play();
+        else if (_currentState == GameState.Paused)
+        {
+            if (Input.GetKeyDown(KeyCode.Escape)) Play();
+        }
     }
 
     public void Play()
@@ -97,6 +113,7 @@ public class GameManager : MonoBehaviour
 
     void StartGame()
     {
+        _elapsedTime = 0; // Reiniciar el tiempo transcurrido al inicio del juego
         BallPool.instance.AddBallsToPool(BallPool.instance.poolsize);
         CreateInitBall();
         isGameRunning = true;
