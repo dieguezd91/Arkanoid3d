@@ -64,7 +64,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 6a12d4f60e40c98488ee156c08000dc6, type: 2}
+  - {fileID: 2100000, guid: 8bad8b8cc3741be4d9524c6ec2663d6c, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -149,4 +149,3 @@ MonoBehaviour:
   upgradeName: Magnet
   speed: 4
   upgradeDuration: 10
-  _rb: {fileID: 1451597161527578473}

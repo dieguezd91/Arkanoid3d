@@ -1,46 +1,53 @@
-using System.Collections;
+﻿using System;
 using System.Collections.Generic;
-using UnityEngine;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
-public class GenericPool<T> : MonoBehaviour
+namespace Game
 {
-
-    private GameObject _prefab;
-    [SerializeField] private List<GameObject> _itemList;
-    public int PoolSize => _poolSize;
-    int _poolSize;
-
-    public GenericPool(GameObject prefab, int poolSize) 
+    public class GenericPool<T>
     {
-        _prefab = prefab;
-        _poolSize = poolSize;
-        Initialize();
-    }
+        private List<T> m_inUseObjects;
+        private List<T> m_poolObjects;
 
-    public void Initialize()
-    {
-        for (int i = 0; i < _poolSize; i++)
-            AddItemToPool();
-    }
-
-    public void AddItemToPool()
-    {
-        GameObject item = Instantiate(_prefab);
-        item.SetActive(false);
-        _itemList.Add(item);
-        item.transform.parent = transform;
-    }
-
-    public GameObject RequestItem()
-    {
-        for (int i = 0; i < _itemList.Count; i++)
+        public GenericPool()
         {
-            if (!_itemList[i].activeSelf)
+            m_inUseObjects = new List<T>();
+            m_poolObjects = new List<T>();
+        }
+
+        public T GetObjectsFromPool()
+        {
+            if (m_poolObjects.Count > 0)
             {
-                _itemList[i].SetActive(true);
-                return _itemList[i];
+                var l_availableObj = m_poolObjects[0];
+                m_poolObjects.Remove(l_availableObj);
+                m_inUseObjects.Add(l_availableObj);
+                return l_availableObj;
+            }
+            return default;
+        }
+
+        public void AddNewUsedObj(T p_obj)
+        {
+            m_inUseObjects.Add(p_obj);
+
+            if (m_poolObjects.Contains(p_obj))
+            {
+                m_poolObjects.Remove(p_obj);
             }
         }
-        return null;
+
+        public void AddToPool(T p_obj)
+        {
+            m_inUseObjects.Remove(p_obj);
+            m_poolObjects.Add(p_obj);
+        }
+
+        public List<T> GetUsedObjs()
+        {
+            return new List<T>(m_inUseObjects);
+        }
     }
 }

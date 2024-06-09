@@ -64,7 +64,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: d7d0f1e18cd2c3e47913c7d1f4582658, type: 2}
+  - {fileID: 2100000, guid: 834f6f62dd06993499098d421decb6a7, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -146,7 +146,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6d44af2936bc4cc4a95aad64a6dd2162, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  rb: {fileID: 7973921909314575921}
   speed: 25
+  minSpeed: 10
+  maxSpeed: 25
   velocity: {x: 0, y: 0, z: 0}
   direction: {x: 0, y: 0, z: 0}
+  magnetPos: {fileID: 0}

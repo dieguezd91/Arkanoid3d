@@ -1,4 +1,4 @@
-using System.Collections;
+using Game;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -14,12 +14,11 @@ public class GameManager : MonoBehaviour
 
     [Header("BALLS")]
     [SerializeField] public Transform ballInitPos;
-    [SerializeField] List<Ball> _balls;
-    [SerializeField] GameObject ballprefab;
     [SerializeField] int maxBalls;
-    public GenericPool<Ball> BallPool => _ballPool;
-    GenericPool<Ball> _ballPool;
+    public BallPool BallPool => _ballPool;
+    [SerializeField] BallPool _ballPool;
     public List<Ball> Balls => _balls;
+    [SerializeField] List<Ball> _balls;
 
     [Header("PLAYER")]
     [SerializeField] Transform playerInitPos;
@@ -108,7 +107,6 @@ public class GameManager : MonoBehaviour
     void StartGame()
     {
         _elapsedTime = 0; // Reiniciar el tiempo transcurrido al inicio del juego
-        _ballPool = new GenericPool<Ball>(ballprefab, maxBalls);
         CreateInitBall();
         isGameRunning = true;
     }
@@ -146,6 +144,8 @@ public class GameManager : MonoBehaviour
 
         //Upgrades
         _upgrades = new List<Upgrade>();
+
+        _ballPool.Initialize(maxBalls);
     }
 
     public void RestartPositions()

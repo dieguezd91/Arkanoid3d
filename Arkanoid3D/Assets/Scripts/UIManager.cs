@@ -50,4 +50,4 @@ public class UIManager : MonoBehaviour
         int seconds = Mathf.FloorToInt(gameManager.ElapsedTime % 60);
         _timer.text = string.Format("{0:00}:{1:00}", minutes, seconds);
     }
-}
+}   
