@@ -5,10 +5,11 @@ using UnityEngine;
 public class Magnet : Upgrade
 {
     private Ball _ball;
+    [SerializeField] AudioClip SFX;
     public override void ApplyUpgrade()
     {
         _ball = GameObject.FindGameObjectWithTag("Ball").GetComponent<Ball>();
-
+        AudioSource.PlayOneShot(SFX);
         if (_ball.isMagnetEnabled())
         {
             Debug.Log("Magnet is already active. Upgrade ignored");

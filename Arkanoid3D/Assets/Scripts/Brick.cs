@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using UnityEngine;
 
 public class Brick : MonoBehaviour
@@ -7,11 +8,15 @@ public class Brick : MonoBehaviour
     MeshRenderer _renderer;
     string materialName;
     [SerializeField] GameObject[] _upgrades;
-    private bool isDestroyed = false;
+
+    [Header("SFX")]
+    [SerializeField] AudioClip breakSFX;
+    AudioSource _audioSource;
 
     private void Start()
     {
         _renderer = GetComponent<MeshRenderer>();
+        _audioSource = GetComponent<AudioSource>();
 
         materialName = _renderer.material.name;
 
@@ -40,18 +45,16 @@ public class Brick : MonoBehaviour
     void TakeDamage()
     {
         HP--;
-        if (HP <= 0 && !isDestroyed)
-        {
-            isDestroyed = true;
-            DestroyBrick();
-        }
+        if (HP <= 0) StartCoroutine(DestroyBrick());
     }
 
-    private void DestroyBrick()
+    private IEnumerator DestroyBrick()
     {
+        _audioSource.PlayOneShot(breakSFX);
         TrySpawnUpgrade();
         GameManager.instance.bricksLeft--;
-        Destroy(gameObject);
+        yield return new WaitForSeconds(breakSFX.length);
+        gameObject.SetActive(false);
     }
 
     private void TrySpawnUpgrade()

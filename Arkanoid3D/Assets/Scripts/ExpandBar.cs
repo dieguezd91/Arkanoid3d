@@ -4,11 +4,12 @@ public class ExpandBarUpgrade : Upgrade
 {
     [SerializeField] private float expandedScale = 2.0f;
     private PlayerController playerController;
+    [SerializeField] AudioClip SFX;
 
     public override void ApplyUpgrade()
     {
         playerController = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerController>();
-
+        AudioSource.PlayOneShot(SFX);
         if (playerController.IsBarExpanded())
         {
 #if UNITY_EDITOR

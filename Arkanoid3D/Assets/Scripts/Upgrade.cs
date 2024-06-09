@@ -9,10 +9,13 @@ public class Upgrade : MonoBehaviour
     private bool _isUpgradeActive = false;
     Rigidbody _rb;
     protected GameManager gameManager;
+    public AudioSource AudioSource => _audioSource;
+    AudioSource _audioSource;
 
     public virtual void Start()
     {
         _rb = GetComponent<Rigidbody>();
+        _audioSource = GetComponent<AudioSource>();
         gameManager = GameManager.instance;
         gameManager.Upgrades.Add(this);
     }

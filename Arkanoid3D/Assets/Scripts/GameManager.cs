@@ -39,6 +39,14 @@ public class GameManager : MonoBehaviour
     public int Lives => _lives;
     int _lives;
 
+    [Header("MUSIC AND SFX")]
+    [SerializeField] AudioClip _WinSFX;
+    [SerializeField] AudioClip _LossSFX;
+    [SerializeField] AudioClip _RoundLostSFX;
+    [SerializeField] AudioClip _PlaySFX;
+    [SerializeField] AudioClip _PauseSFX;
+    AudioSource _audioSource;
+
     private void Start()
     {
         instance = this;
@@ -81,6 +89,7 @@ public class GameManager : MonoBehaviour
         Time.timeScale = 1;
         _currentState = GameState.Playing;
         uiManager.PlayUI();
+        _audioSource.PlayOneShot(_PlaySFX);
     }
 
     public void Pause()
@@ -88,6 +97,7 @@ public class GameManager : MonoBehaviour
         _currentState = GameState.Paused;
         Time.timeScale = 0;
         uiManager.Pause();
+        _audioSource.PlayOneShot(_PauseSFX);
     }
 
     public void MainMenu()
@@ -123,13 +133,22 @@ public class GameManager : MonoBehaviour
         {
             RestartPositions();
             _lives--;
+            _audioSource.PlayOneShot(_RoundLostSFX);
         }
         else Lose();
     }
 
-    void Win() => MainMenu();
+    void Win()
+    {
+        _audioSource.PlayOneShot(_WinSFX);
+        MainMenu();
+    }
 
-    void Lose() => MainMenu();
+    void Lose()
+    {
+        _audioSource.PlayOneShot(_LossSFX);
+        MainMenu();
+    }
 
     void GetActors()
     {
@@ -146,6 +165,8 @@ public class GameManager : MonoBehaviour
         _upgrades = new List<Upgrade>();
 
         _ballPool.Initialize(maxBalls);
+
+        _audioSource = GetComponent<AudioSource>();
     }
 
     public void RestartPositions()

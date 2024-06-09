@@ -7,6 +7,7 @@ public class Ball : MonoBehaviour
 {
     public Rigidbody RB => _rb;
     Rigidbody _rb;
+    AudioSource _audioSource;
     public float speed;
     public float minSpeed = 10f; // Velocidad mínima de la pelota
     public float maxSpeed = 25f; // Velocidad máxima de la pelota
@@ -17,9 +18,14 @@ public class Ball : MonoBehaviour
     private bool catchedBall = false;
     [SerializeField] Transform magnetPos;
 
+    [SerializeField] AudioClip _ballLostSFX;
+    [SerializeField] AudioClip _wallBounce;
+    [SerializeField] AudioClip _playerBounce;
+
     private void Start()
     {
         _rb = GetComponent<Rigidbody>();
+        _audioSource = GetComponent<AudioSource>();
         magnetPos = GameObject.Find("MagnetPos").GetComponent<Transform>();
         SetNewDirection(); // Establecer una dirección inicial para la pelota
     }
@@ -38,33 +44,48 @@ public class Ball : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
-        if (collision.gameObject.CompareTag("Player") && magnetActive)
+        if (collision.gameObject.CompareTag("Player"))
         {
-            Debug.Log("Catching the ball");
-            _rb.velocity = Vector3.zero;
-            speed = 0f;
-            catchedBall = true;
-        }
-        else
-        {
-            // Cambiar la dirección de la pelota al colisionar con otro objeto
-            direction = Vector3.Reflect(direction, collision.contacts[0].normal);
-            direction = new Vector3(direction.x, 0, direction.z).normalized; // Mantener la dirección en el eje Y en 0 y normalizar
-
-            // Asegurarse de que el ángulo de rebote no sea demasiado plano
-            if (Mathf.Abs(direction.z) < 0.1f)
+            if (magnetActive)
             {
-                direction.z = direction.z > 0 ? 0.1f : -0.1f; // Ajustar el ángulo de rebote
-                direction = direction.normalized; // Normalizar la dirección ajustada
+                Debug.Log("Catching the ball");
+                _rb.velocity = Vector3.zero;
+                speed = 0f;
+                catchedBall = true;
             }
-
-            speed = Mathf.Clamp(speed, minSpeed, maxSpeed); // Asegurarse de que la velocidad este dentro de los limites
+            else Bounce(collision);
         }
-
-        if (collision.gameObject.CompareTag("DeadZone"))
+        else if (collision.gameObject.CompareTag("DeadZone"))
         {
+            _audioSource.PlayOneShot(_ballLostSFX);
             GameManager.instance.Balls.Remove(this);
             gameObject.SetActive(false);
+        }
+        else Bounce(collision);
+    }
+
+    private void Bounce(Collision collision)
+    {
+        // Cambiar la dirección de la pelota al colisionar con otro objeto
+        direction = Vector3.Reflect(direction, collision.contacts[0].normal);
+        direction = new Vector3(direction.x, 0, direction.z).normalized; // Mantener la dirección en el eje Y en 0 y normalizar
+
+        // Asegurarse de que el ángulo de rebote no sea demasiado plano
+        if (Mathf.Abs(direction.z) < 0.1f)
+        {
+            direction.z = direction.z > 0 ? 0.1f : -0.1f; // Ajustar el ángulo de rebote
+            direction = direction.normalized; // Normalizar la dirección ajustada
+        }
+        speed = Mathf.Clamp(speed, minSpeed, maxSpeed); // Asegurarse de que la velocidad este dentro de los limites
+
+        switch(collision.gameObject.tag)
+        {
+            case "Player":
+                _audioSource.PlayOneShot(_playerBounce);
+                break;
+            case "Wall":
+                _audioSource.PlayOneShot(_wallBounce);
+                break;
         }
     }
 

@@ -5,11 +5,12 @@ using UnityEngine;
 public class Multiball : Upgrade
 {
     [SerializeField] int ballsToSpawn;
+    [SerializeField] AudioClip SFX;
 
     public override void ApplyUpgrade()
     {
         base.ApplyUpgrade();
-
+        AudioSource.PlayOneShot(SFX);
         for(int n = 0; n < ballsToSpawn; n++)
         {
             Ball newBall = gameManager.BallPool.RequestItem().GetComponent<Ball>();
