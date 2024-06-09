@@ -12,20 +12,17 @@ public class Magnet : Upgrade
 
         if (_ball.isMagnetEnabled())
         {
-            Debug.Log("Magnet is already active. Upgrade ignored");
             Destroy(gameObject);
             return;
         }
 
         base.ApplyUpgrade();
         _ball.EnableMagnet();
-        Debug.Log("Magnet enabled");
 
     }
     public override void EndUpgrade()
     {
         base.EndUpgrade();
         _ball.DisableMagnet();
-        Debug.Log("Magnet disabled");
     }
 }

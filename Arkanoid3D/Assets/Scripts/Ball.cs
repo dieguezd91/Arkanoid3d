@@ -39,7 +39,6 @@ public class Ball : MonoBehaviour
     {
         if (collision.gameObject.CompareTag("Player") && magnetActive)
         {
-            Debug.Log("Catching the ball");
             _rb.velocity = Vector3.zero;
             speed = 0f;
             catchedBall = true;

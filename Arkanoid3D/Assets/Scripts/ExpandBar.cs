@@ -12,9 +12,6 @@ public class ExpandBarUpgrade : Upgrade
 
         if (playerController.IsBarExpanded())
         {
-#if UNITY_EDITOR
-            Debug.Log("Bar is already expanded. Upgrade ignored.");
-#endif
             Destroy(gameObject);
             return;
         }
@@ -22,10 +19,6 @@ public class ExpandBarUpgrade : Upgrade
         base.ApplyUpgrade();
 
         playerController.ExpandBar(expandedScale);
-
-#if UNITY_EDITOR
-        Debug.Log("Bar expanded!");
-#endif
     }
 
     public override void EndUpgrade()
@@ -33,10 +26,6 @@ public class ExpandBarUpgrade : Upgrade
         if (playerController != null)
         {
             playerController.ShrinkBar(expandedScale);
-
-#if UNITY_EDITOR
-            Debug.Log("Bar restored to original size.");
-#endif
         }
 
         base.EndUpgrade();
