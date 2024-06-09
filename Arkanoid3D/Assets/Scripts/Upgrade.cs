@@ -8,7 +8,7 @@ public class Upgrade : MonoBehaviour
     float _upgradeStartTime;
     private bool _isUpgradeActive = false;
     Rigidbody _rb;
-    GameManager gameManager;
+    protected GameManager gameManager;
 
     public virtual void Start()
     {

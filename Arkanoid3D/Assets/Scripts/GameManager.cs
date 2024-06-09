@@ -17,6 +17,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] List<Ball> _balls;
     [SerializeField] GameObject ballprefab;
     [SerializeField] int maxBalls;
+    public GenericPool<Ball> BallPool => _ballPool;
     GenericPool<Ball> _ballPool;
     public List<Ball> Balls => _balls;
 
