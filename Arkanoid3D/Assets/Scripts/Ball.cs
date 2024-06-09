@@ -57,7 +57,7 @@ public class Ball : MonoBehaviour
                 direction = direction.normalized; // Normalizar la dirección ajustada
             }
 
-            speed = Mathf.Clamp(speed, minSpeed, maxSpeed); // Asegurarse de que la velocidad esté dentro de los límites
+            speed = Mathf.Clamp(speed, minSpeed, maxSpeed); // Asegurarse de que la velocidad este dentro de los limites
         }
 
         if (collision.gameObject.CompareTag("DeadZone"))
