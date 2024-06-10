@@ -6,7 +6,7 @@ public class BallPool : MonoBehaviour
 {
     public static BallPool instance;
     [SerializeField] GameObject _ballPrefab;
-    [SerializeField] private List<GameObject> _ballList;
+    [SerializeField] List<GameObject> _ballList;
     public int PoolSize => _poolSize;
     int _poolSize;
 
@@ -17,27 +17,35 @@ public class BallPool : MonoBehaviour
 
         _ballList = new List<GameObject>();
         for (int i = 0; i < _poolSize; i++)
-            AddItemToPool();
+            AddBallToPool();
     }
 
-    public void AddItemToPool()
+    public void AddBallToPool()
     {
-        GameObject ball = Instantiate(_ballPrefab);
+        GameObject ball = Instantiate(_ballPrefab, transform);
         ball.SetActive(false);
         _ballList.Add(ball);
-        ball.transform.parent = transform;
     }
 
-    public GameObject RequestItem()
+    public GameObject RequestBall()
     {
         for (int i = 0; i < _ballList.Count; i++)
         {
             if (!_ballList[i].activeSelf)
             {
-                _ballList[i].SetActive(true);
-                return _ballList[i];
+                GameObject ball = _ballList[i];
+
+                GameManager.instance.Balls.Add(ball.GetComponent<Ball>());
+                ball.SetActive(true);
+                return ball;
             }
         }
         return null;
+    }
+
+    public void RemoveItem(Ball ballToRemove)
+    {
+        GameManager.instance.Balls.Remove(ballToRemove);
+        ballToRemove.gameObject.SetActive(false);
     }
 }

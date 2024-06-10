@@ -147,15 +147,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6d44af2936bc4cc4a95aad64a6dd2162, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 25
+  speed: 0
   minSpeed: 10
   maxSpeed: 25
-  velocity: {x: 0, y: 0, z: 0}
-  direction: {x: 0, y: 0, z: 0}
-  magnetPos: {fileID: 0}
-  _ballLostSFX: {fileID: 8300000, guid: 7ffa0b85ed21e064b80e7aa8794b89b7, type: 3}
-  _wallBounce: {fileID: 8300000, guid: e24a1bb1d8ae64cb48cad6c57dfce2d2, type: 3}
-  _playerBounce: {fileID: 8300000, guid: 7e23cb852a3fd4e788aca72da6665245, type: 3}
+  _ballLostSFX: {fileID: 8300000, guid: 2ee8752b0c4911947a1bd3134d49b1cc, type: 3}
+  _wallBounce: {fileID: 8300000, guid: f024765cee84a9c4bbcbae188380330b, type: 3}
+  _playerBounce: {fileID: 8300000, guid: d3a8ef4c780b0944596a6b45cce6397e, type: 3}
 --- !u!82 &4543171352635431248
 AudioSource:
   m_ObjectHideFlags: 0

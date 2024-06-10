@@ -5,7 +5,6 @@ using UnityEngine;
 public class Brick : MonoBehaviour
 {
     public int HP;
-    bool _destroying;
     [HideInInspector] public string color;
     [SerializeField] GameObject[] _upgrades;
         
@@ -47,7 +46,7 @@ public class Brick : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
-        if(collision.gameObject.CompareTag("Ball") && !_destroying) TakeDamage();     
+        if(collision.gameObject.CompareTag("Ball")) TakeDamage();     
     }
 
     void TakeDamage()
@@ -59,7 +58,7 @@ public class Brick : MonoBehaviour
     private IEnumerator DestroyBrick()
     {
         _audioSource.PlayOneShot(breakSFX);
-        _destroying = true;
+        GetComponent<Collider>().enabled = false;
         TrySpawnUpgrade();
         GameManager.instance.bricksLeft--;
         yield return new WaitForSeconds(breakSFX.length);

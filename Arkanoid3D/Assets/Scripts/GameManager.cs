@@ -1,6 +1,4 @@
-using Game;
 using System.Collections.Generic;
-using System.Drawing;
 using UnityEngine;
 
 public class GameManager : MonoBehaviour
@@ -55,6 +53,7 @@ public class GameManager : MonoBehaviour
 
         GetActors();
         uiManager.Initialize();
+        _audioSource = GetComponent<AudioSource>();
     }
 
     void Update()
@@ -167,9 +166,8 @@ public class GameManager : MonoBehaviour
         //Upgrades
         _upgrades = new List<Upgrade>();
 
+        //Ball pool
         _ballPool.Initialize(maxBalls);
-
-        _audioSource = GetComponent<AudioSource>();
     }
 
     public void RestartPositions()
@@ -177,6 +175,7 @@ public class GameManager : MonoBehaviour
         isGameRunning = false;
         Player.transform.SetPositionAndRotation(playerInitPos.position, playerInitPos.rotation);
 
+        bricksLeft = 0;
         foreach (GameObject spawn in Spawns)
         {
             Brick newBrick = Instantiate(BrickPrefab, spawn.transform).GetComponent<Brick>();
@@ -200,18 +199,22 @@ public class GameManager : MonoBehaviour
 
         foreach (Ball ball in _balls)
         {
-            Debug.Log("Destroy: " + ball);
-            Destroy(ball);
+            ball.gameObject.SetActive(false);
+            _balls.Remove(ball);
         }
         _balls.Clear();
 
-        foreach (Upgrade upgrade in _upgrades) Destroy(upgrade);
+        foreach (Upgrade upgrade in _upgrades)
+        {
+            upgrade.gameObject.SetActive(false);
+            _upgrades.Remove(upgrade);
+        }
         _upgrades.Clear();
     }
 
     void CreateInitBall()
     {
-        Ball initBall = _ballPool.RequestItem().GetComponent<Ball>();
+        Ball initBall = _ballPool.RequestBall().GetComponent<Ball>();
         initBall.gameObject.SetActive(true);
         initBall.transform.position = ballInitPos.position;
         _balls.Add(initBall);

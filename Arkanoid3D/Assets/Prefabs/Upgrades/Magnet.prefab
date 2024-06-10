@@ -150,7 +150,7 @@ MonoBehaviour:
   upgradeName: Magnet
   speed: 4
   upgradeDuration: 10
-  SFX: {fileID: 8300000, guid: 78ab81edcae50154e954356995545031, type: 3}
+  SFX: {fileID: 8300000, guid: 14be986cb27a06448803f25712504864, type: 3}
 --- !u!82 &2308628440169595761
 AudioSource:
   m_ObjectHideFlags: 0

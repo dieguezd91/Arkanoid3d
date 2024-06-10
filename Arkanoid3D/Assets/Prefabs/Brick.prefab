@@ -107,7 +107,7 @@ MonoBehaviour:
   _redMat: {fileID: 2100000, guid: 94c799969ecc96642a815786bdc4b34c, type: 2}
   _orangeMat: {fileID: 2100000, guid: 76b7a303131f083408fd769ebbb4c053, type: 2}
   _yellowMat: {fileID: 2100000, guid: ba7722dd48e32e349b5576fa50adfec3, type: 2}
-  breakSFX: {fileID: 8300000, guid: 79c0df5bab6eace4cb85c38568cb1071, type: 3}
+  breakSFX: {fileID: 8300000, guid: f05844565777db7458ff5f2372f6d08f, type: 3}
 --- !u!65 &7177952780905683430
 BoxCollider:
   m_ObjectHideFlags: 0

@@ -2,15 +2,20 @@ using UnityEngine;
 
 public class Upgrade : MonoBehaviour
 {
-    [SerializeField] string upgradeName;
-    [SerializeField] float speed;
-    [SerializeField] float upgradeDuration;
-    float _upgradeStartTime;
-    private bool _isUpgradeActive = false;
-    Rigidbody _rb;
     protected GameManager gameManager;
-    public AudioSource AudioSource => _audioSource;
+    Rigidbody _rb;
+
+    float _upgradeStartTime;
+    bool _isUpgradeActive;
+
+    [Header("Data")]
+    [SerializeField] string upgradeName;
+    [SerializeField] int speed;
+    [SerializeField] float upgradeDuration;
+
+    //AUDIO
     AudioSource _audioSource;
+    [SerializeField] AudioClip SFX;
 
     public virtual void Start()
     {
@@ -42,6 +47,7 @@ public class Upgrade : MonoBehaviour
 
     public virtual void ApplyUpgrade()
     {
+        _audioSource.PlayOneShot(SFX);
         _upgradeStartTime = Time.time;
         _isUpgradeActive = true;
         GetComponent<MeshRenderer>().enabled = false;

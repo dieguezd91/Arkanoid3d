@@ -5,22 +5,26 @@ using UnityEngine;
 
 public class Ball : MonoBehaviour
 {
-    public Rigidbody RB => _rb;
+    
     Rigidbody _rb;
-    AudioSource _audioSource;
-    public float speed;
-    public float minSpeed = 10f; // Velocidad mínima de la pelota
-    public float maxSpeed = 25f; // Velocidad máxima de la pelota
-    public Vector3 velocity;
-    public Vector3 direction; // Dirección de movimiento de la pelota
+    Vector3 direction;
 
-    private bool magnetActive = false;
-    private bool catchedBall = false;
-    [SerializeField] Transform magnetPos;
+    [Header("Speed values")]
+    [SerializeField] int speed;
+    [SerializeField] int minSpeed;
+    [SerializeField] int maxSpeed;
 
+    //MAGNET
+    public bool MagnetActive => magnetActive;
+    bool magnetActive;
+    bool catchedBall;
+    Transform magnetPos;
+
+    [Header("AUDIO")]
     [SerializeField] AudioClip _ballLostSFX;
     [SerializeField] AudioClip _wallBounce;
     [SerializeField] AudioClip _playerBounce;
+    AudioSource _audioSource;
 
     private void Start()
     {
@@ -33,7 +37,7 @@ public class Ball : MonoBehaviour
     public void UpdateBall()
     {
         _rb.velocity = direction * Mathf.Clamp(speed, minSpeed, maxSpeed); // Mantener la velocidad dentro de los límites
-        MagnetLogic();
+        if (catchedBall) MagnetLogic();
     }
 
     public void SetNewDirection()
@@ -46,20 +50,18 @@ public class Ball : MonoBehaviour
     {
         if (collision.gameObject.CompareTag("Player"))
         {
-            if (magnetActive)
+            if (!magnetActive) Bounce(collision);
+            else
             {
-                Debug.Log("Catching the ball");
                 _rb.velocity = Vector3.zero;
-                speed = 0f;
+                speed = 0;
                 catchedBall = true;
             }
-            else Bounce(collision);
         }
         else if (collision.gameObject.CompareTag("DeadZone"))
         {
             _audioSource.PlayOneShot(_ballLostSFX);
-            GameManager.instance.Balls.Remove(this);
-            gameObject.SetActive(false);
+            BallPool.instance.RemoveItem(collision.gameObject.GetComponent<Ball>());
         }
         else Bounce(collision);
     }
@@ -68,7 +70,8 @@ public class Ball : MonoBehaviour
     {
         // Cambiar la dirección de la pelota al colisionar con otro objeto
         direction = Vector3.Reflect(direction, collision.contacts[0].normal);
-        direction = new Vector3(direction.x, 0, direction.z).normalized; // Mantener la dirección en el eje Y en 0 y normalizar
+        direction.y = 0;
+        Vector3.Normalize(direction); // Mantener la dirección en el eje Y en 0 y normalizar
 
         // Asegurarse de que el ángulo de rebote no sea demasiado plano
         if (Mathf.Abs(direction.z) < 0.1f)
@@ -78,44 +81,17 @@ public class Ball : MonoBehaviour
         }
         speed = Mathf.Clamp(speed, minSpeed, maxSpeed); // Asegurarse de que la velocidad este dentro de los limites
 
-        switch(collision.gameObject.tag)
-        {
-            case "Player":
-                _audioSource.PlayOneShot(_playerBounce);
-                break;
-            case "Wall":
-                _audioSource.PlayOneShot(_wallBounce);
-                break;
-        }
+        if(collision.gameObject.tag == "Player")
+            _audioSource.PlayOneShot(_playerBounce);
+        else if(collision.gameObject.tag == "Wall")
+            _audioSource.PlayOneShot(_wallBounce);
     }
 
-    private void OnDrawGizmosSelected()
-    {
-        Gizmos.DrawRay(transform.position, direction * speed);
-    }
-
-    public void EnableMagnet()
-    {
-        magnetActive = true;
-    }
-
-    public void DisableMagnet()
-    {
-        magnetActive = false;
-    }
-
-    public bool isMagnetEnabled()
-    {
-        return magnetActive;
-    }
-
+    public void ManageMagnetState() => magnetActive = !magnetActive;
     public void MagnetLogic()
     {
-        if (catchedBall)
-        {
-            transform.position = magnetPos.position;
-        }
-        if (catchedBall && Input.GetKeyDown(KeyCode.Space))
+        transform.position = magnetPos.position;
+        if (Input.GetKeyDown(KeyCode.Space))
         {
             SetNewDirection();
             speed = maxSpeed; // Restablecer la velocidad al maximo al liberar la pelota

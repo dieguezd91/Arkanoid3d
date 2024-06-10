@@ -8,10 +8,6 @@ public class DeadZone : MonoBehaviour
     [SerializeField] LayerMask ballsLayer;
     private void OnCollisionEnter(Collision other)
     {
-        if (other.gameObject.layer == 6)
-        {
-            GameManager.instance.Balls.Remove(other.gameObject.GetComponent<Ball>());
-            other.gameObject.SetActive(false);
-        }
+        if (other.gameObject.tag == "Ball") BallPool.instance.RemoveItem(other.gameObject.GetComponent<Ball>());
     }
 }
