@@ -1,5 +1,6 @@
 using Game;
 using System.Collections.Generic;
+using System.Drawing;
 using UnityEngine;
 
 public class GameManager : MonoBehaviour
@@ -27,7 +28,8 @@ public class GameManager : MonoBehaviour
     PlayerController playerScript;
 
     [Header("BRICKS")]
-    [SerializeField] public GameObject[] Bricks;
+    GameObject[] Spawns;
+    [SerializeField] GameObject BrickPrefab;
     [SerializeField] public int bricksLeft;
 
     //Upgrades
@@ -141,12 +143,14 @@ public class GameManager : MonoBehaviour
     void Win()
     {
         _audioSource.PlayOneShot(_WinSFX);
+        SetGame();
         MainMenu();
     }
 
     void Lose()
     {
         _audioSource.PlayOneShot(_LossSFX);
+        SetGame();
         MainMenu();
     }
 
@@ -158,8 +162,7 @@ public class GameManager : MonoBehaviour
         playerScript = _player.GetComponent<PlayerController>();
 
         //Bricks
-        Bricks = GameObject.FindGameObjectsWithTag("Brick");
-        bricksLeft = Bricks.Length;
+        Spawns = GameObject.FindGameObjectsWithTag("BrickSpawn");
 
         //Upgrades
         _upgrades = new List<Upgrade>();
@@ -174,7 +177,32 @@ public class GameManager : MonoBehaviour
         isGameRunning = false;
         Player.transform.SetPositionAndRotation(playerInitPos.position, playerInitPos.rotation);
 
-        foreach (Ball ball in _balls) Destroy(ball);
+        foreach (GameObject spawn in Spawns)
+        {
+            Brick newBrick = Instantiate(BrickPrefab, spawn.transform).GetComponent<Brick>();
+            switch (spawn.name)
+            {
+                case "Red Brick Spawn":
+                    newBrick.color = "Red";
+                    break;
+                case "Orange Brick Spawn":
+                    newBrick.color = "Orange";
+                    break;
+                case "Yellow Brick Spawn":
+                    newBrick.color = "Yellow";
+                    break;
+                default:
+                    newBrick.color = "Yellow";
+                    break;
+            }
+            bricksLeft++;
+        }
+
+        foreach (Ball ball in _balls)
+        {
+            Debug.Log("Destroy: " + ball);
+            Destroy(ball);
+        }
         _balls.Clear();
 
         foreach (Upgrade upgrade in _upgrades) Destroy(upgrade);

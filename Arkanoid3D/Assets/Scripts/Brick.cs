@@ -5,9 +5,15 @@ using UnityEngine;
 public class Brick : MonoBehaviour
 {
     public int HP;
-    MeshRenderer _renderer;
-    string materialName;
+    bool _destroying;
+    [HideInInspector] public string color;
     [SerializeField] GameObject[] _upgrades;
+        
+    Renderer _renderer;
+    [SerializeField] Material _redMat;
+    [SerializeField] Material _orangeMat;
+    [SerializeField] Material _yellowMat;
+
 
     [Header("SFX")]
     [SerializeField] AudioClip breakSFX;
@@ -15,31 +21,33 @@ public class Brick : MonoBehaviour
 
     private void Start()
     {
-        _renderer = GetComponent<MeshRenderer>();
         _audioSource = GetComponent<AudioSource>();
+        _renderer = GetComponent<Renderer>();
 
-        materialName = _renderer.material.name;
-
-        switch (materialName)
+        switch (color)
         {
-            case string name when name.Contains("Red"):
+            case "Red":
                 HP = 3;
+                _renderer.material = _redMat;
                 break;
-            case string name when name.Contains("Orange"):
+            case "Orange":
                 HP = 2;
+                _renderer.material = _orangeMat;
                 break;
-            case string name when name.Contains("Yellow"):
+            case "Yellow":
                 HP = 1;
+                _renderer.material = _yellowMat;
                 break;
             default:
                 HP = 1;
+                _renderer.material = _yellowMat;
                 break;
         }
     }
 
     private void OnCollisionEnter(Collision collision)
     {
-        if(collision.gameObject.CompareTag("Ball")) TakeDamage();     
+        if(collision.gameObject.CompareTag("Ball") && !_destroying) TakeDamage();     
     }
 
     void TakeDamage()
@@ -51,6 +59,7 @@ public class Brick : MonoBehaviour
     private IEnumerator DestroyBrick()
     {
         _audioSource.PlayOneShot(breakSFX);
+        _destroying = true;
         TrySpawnUpgrade();
         GameManager.instance.bricksLeft--;
         yield return new WaitForSeconds(breakSFX.length);
