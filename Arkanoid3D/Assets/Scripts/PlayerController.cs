@@ -1,56 +1,64 @@
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
-    public float speedMovement = 10f;
-    public float xRange = 8f;
+    Renderer _renderer;
+
+    public float speedMovement;
+    public float xRange;
 
     private float halfBarWidth;
-    private bool isBarExpanded = false;
+    float currentXRange;
+
+    //MAGNET
+    public bool IsMagnetActive => isMagnetActive;
+    bool isMagnetActive;
+    Ball catchedBall;
+    Transform magnetPos;
+
+    //EXPAND
+    public bool IsBarExpanded => isBarExpanded;
+    private bool isBarExpanded;
 
     private void Start()
     {
-        halfBarWidth = GetComponent<Renderer>().bounds.size.x / 2;
+        _renderer = GetComponent<Renderer>();
+        halfBarWidth = _renderer.bounds.size.x / 2;
+        currentXRange = xRange - halfBarWidth;
+
+        magnetPos = GameObject.Find("MagnetPos").GetComponent<Transform>();
     }
 
     public void UpdatePlayer()
     {
         float horizontalInput = Input.GetAxis("Horizontal");
-
-        float currentXRange = xRange - halfBarWidth;
-
         Vector3 newPosition = transform.position + Vector3.right * horizontalInput * speedMovement * Time.deltaTime;
-
         newPosition.x = Mathf.Clamp(newPosition.x, -currentXRange, currentXRange);
         transform.position = newPosition;
+        if (catchedBall != null) MagnetLogic();
     }
 
-    public void ExpandBar(float scaleFactor)
+    public void ManageBarSize(float scaleFactor)
     {
-        if (!isBarExpanded)
+        if (isBarExpanded) scaleFactor = 1 / scaleFactor;
+        transform.localScale = new Vector3(transform.localScale.x * scaleFactor, transform.localScale.y, transform.localScale.z);
+        halfBarWidth = _renderer.bounds.size.x / 2;
+        currentXRange = xRange - halfBarWidth;
+        isBarExpanded = !isBarExpanded;
+    }
+
+    public void ManageMagnetState() => isMagnetActive = !isMagnetActive; 
+
+    public void CatchBall(Ball ball) => catchedBall = ball;
+
+    public void MagnetLogic()
+    {
+        catchedBall.transform.position = magnetPos.position;
+        if (Input.GetKeyDown(KeyCode.Space))
         {
-            transform.localScale = new Vector3(transform.localScale.x * scaleFactor, transform.localScale.y, transform.localScale.z);
-
-            halfBarWidth = GetComponent<Renderer>().bounds.size.x / 2;
-
-            isBarExpanded = true;
+            catchedBall.SetNewDirection();
+            catchedBall = null;
         }
-    }
-
-    public void ShrinkBar(float scaleFactor)
-    {
-        if (isBarExpanded)
-        {
-            transform.localScale = new Vector3(transform.localScale.x / scaleFactor, transform.localScale.y, transform.localScale.z);
-
-            halfBarWidth = GetComponent<Renderer>().bounds.size.x / 2;
-
-            isBarExpanded = false;
-        }
-    }
-
-    public bool IsBarExpanded()
-    {
-        return isBarExpanded;
     }
 }

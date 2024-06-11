@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class ExpandBarUpgrade : Upgrade
+public class ExpandBar : Upgrade
 {
     [SerializeField] float expandedScale;
     PlayerController playerController;
@@ -8,19 +8,19 @@ public class ExpandBarUpgrade : Upgrade
     public override void ApplyUpgrade()
     {
         playerController = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerController>();
-        if (playerController.IsBarExpanded())
+        if (playerController.IsBarExpanded)
         {
-            Destroy(gameObject);
+            DestroyUpgrade();
             return;
         }
 
         base.ApplyUpgrade();
-        playerController.ExpandBar(expandedScale);
+        playerController.ManageBarSize(expandedScale);
     }
 
     public override void EndUpgrade()
     {
-        if (playerController != null) playerController.ShrinkBar(expandedScale);
+        if (playerController != null) playerController.ManageBarSize(expandedScale);
         base.EndUpgrade();
     }
 }

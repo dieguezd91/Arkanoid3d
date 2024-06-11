@@ -56,11 +56,7 @@ public class Upgrade : MonoBehaviour
         GetComponent<Collider>().enabled = false;
     }
 
-    public virtual void EndUpgrade()
-    {
-        _isUpgradeActive = false;
-        DestroyUpgrade();
-    }
+    public virtual void EndUpgrade() => DestroyUpgrade(); 
 
     bool CheckUpgradeFinishTime() => Time.time >= _upgradeStartTime + upgradeDuration;
 
