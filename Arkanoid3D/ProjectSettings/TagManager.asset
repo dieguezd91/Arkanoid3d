@@ -10,6 +10,8 @@ TagManager:
   - Ground
   - DeadZone
   - ExtraBall
+  - BrickSpawn
+  - Upgrade
   layers:
   - Default
   - TransparentFX
