@@ -22,7 +22,6 @@ public class Upgrade : MonoBehaviour
         _rb = GetComponent<Rigidbody>();
         _audioSource = GetComponent<AudioSource>();
         gameManager = GameManager.instance;
-        gameManager.Upgrades.Add(this);
     }
 
     public void UpdateUpgrade()
@@ -34,14 +33,17 @@ public class Upgrade : MonoBehaviour
 
     void OnTriggerEnter(Collider collision)
     {
-        switch(collision.gameObject.tag)
+        if (!_isUpgradeActive)
         {
-            case "Player":
-                ApplyUpgrade();
-                break;
-            case "DeadZone":
-                DestroyUpgrade();
-                break;
+            switch(collision.gameObject.tag)
+            {
+                case "Player":
+                    ApplyUpgrade();
+                    break;
+                case "DeadZone":
+                    DestroyUpgrade();
+                    break;
+            }
         }
     }
 
@@ -60,7 +62,7 @@ public class Upgrade : MonoBehaviour
         DestroyUpgrade();
     }
 
-    bool CheckUpgradeFinishTime() => _isUpgradeActive && Time.time >= _upgradeStartTime + upgradeDuration;
+    bool CheckUpgradeFinishTime() => Time.time >= _upgradeStartTime + upgradeDuration;
 
     public void DestroyUpgrade()
     {

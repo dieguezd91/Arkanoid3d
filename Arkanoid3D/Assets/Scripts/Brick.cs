@@ -63,6 +63,7 @@ public class Brick : MonoBehaviour
         GameManager.instance.bricksLeft--;
         yield return new WaitForSeconds(breakSFX.length);
         gameObject.SetActive(false);
+        GameManager.instance.Bricks.Remove(gameObject);
     }
 
     private void TrySpawnUpgrade()

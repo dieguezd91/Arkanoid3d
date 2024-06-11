@@ -17,7 +17,7 @@ GameObject:
   - component: {fileID: 7575860904247511953}
   m_Layer: 0
   m_Name: Multiball
-  m_TagString: Untagged
+  m_TagString: Upgrade
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -123,8 +123,8 @@ MonoBehaviour:
   upgradeName: Multiball
   speed: 4
   upgradeDuration: 1
-  ballsToSpawn: 4
   SFX: {fileID: 8300000, guid: 8b27a1c5614162a4a9ec9466a13e7eeb, type: 3}
+  ballsToSpawn: 4
 --- !u!54 &1451597161527578473
 Rigidbody:
   m_ObjectHideFlags: 0

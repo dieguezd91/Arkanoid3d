@@ -17,7 +17,7 @@ GameObject:
   - component: {fileID: -8166507042652120168}
   m_Layer: 0
   m_Name: ExpandBar
-  m_TagString: Untagged
+  m_TagString: Upgrade
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -52,8 +52,8 @@ MonoBehaviour:
   upgradeName: ExpandBar
   speed: 4
   upgradeDuration: 10
-  expandedScale: 2
   SFX: {fileID: 8300000, guid: 23411806b015a0e4992475a7603181b5, type: 3}
+  expandedScale: 2
 --- !u!33 &2020837085695627191
 MeshFilter:
   m_ObjectHideFlags: 0

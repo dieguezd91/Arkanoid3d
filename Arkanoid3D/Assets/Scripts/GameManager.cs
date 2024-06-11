@@ -1,4 +1,6 @@
 using System.Collections.Generic;
+using Unity.VisualScripting;
+using UnityEditor.Animations;
 using UnityEngine;
 
 public class GameManager : MonoBehaviour
@@ -27,6 +29,8 @@ public class GameManager : MonoBehaviour
 
     [Header("BRICKS")]
     GameObject[] Spawns;
+    public List<GameObject> Bricks => _bricks;
+    List<GameObject> _bricks;
     [SerializeField] GameObject BrickPrefab;
     [SerializeField] public int bricksLeft;
 
@@ -66,14 +70,10 @@ public class GameManager : MonoBehaviour
                 playerScript.UpdatePlayer();
                 if (bricksLeft == 0) Win();
 
-                if (_upgrades.Count > 0)
-                    for (int i = _upgrades.Count - 1; i >= 0; i--)
-                        _upgrades[i].UpdateUpgrade(); 
+                for (int i = 0; i < _upgrades.Count; i++) _upgrades[i].UpdateUpgrade();
 
-                if (_balls.Count > 0)
-                    for (int i = _balls.Count - 1; i >= 0; i--)
-                        _balls[i].UpdateBall(); 
-                else LoseRound();
+                for (int i = 0; i < _balls.Count; i++) _balls[i].UpdateBall(); 
+                if(_balls.Count <= 0) LoseRound();
 
                 if (Input.GetKeyDown(KeyCode.Escape)) Pause();
             }
@@ -111,7 +111,9 @@ public class GameManager : MonoBehaviour
 
     public void LoadGame()
     {
-        SetGame();
+        _lives = initLives;
+        RestartPositions();
+        CreateBricks();
         Play();
     }
 
@@ -122,18 +124,12 @@ public class GameManager : MonoBehaviour
         isGameRunning = true;
     }
 
-    void SetGame()
-    {
-        RestartPositions();
-        _lives = initLives;
-    }
-
     public void LoseRound()
     {
+        _lives--;
         if (_lives > 0)
         {
             RestartPositions();
-            _lives--;
             _audioSource.PlayOneShot(_RoundLostSFX);
         }
         else Lose();
@@ -142,14 +138,12 @@ public class GameManager : MonoBehaviour
     void Win()
     {
         _audioSource.PlayOneShot(_WinSFX);
-        SetGame();
         MainMenu();
     }
 
     void Lose()
     {
         _audioSource.PlayOneShot(_LossSFX);
-        SetGame();
         MainMenu();
     }
 
@@ -162,6 +156,7 @@ public class GameManager : MonoBehaviour
 
         //Bricks
         Spawns = GameObject.FindGameObjectsWithTag("BrickSpawn");
+        _bricks = new List<GameObject>();
 
         //Upgrades
         _upgrades = new List<Upgrade>();
@@ -175,10 +170,36 @@ public class GameManager : MonoBehaviour
         isGameRunning = false;
         Player.transform.SetPositionAndRotation(playerInitPos.position, playerInitPos.rotation);
 
+        //foreach(Ball ball in _balls) ball.gameObject.SetActive(false);
+        foreach (GameObject ball in GameObject.FindGameObjectsWithTag("Ball")) ball.SetActive(false);
+        _balls.Clear();
+
+        //foreach (Upgrade upgrade in _upgrades) upgrade.DestroyUpgrade();
+        foreach (GameObject upgrade in GameObject.FindGameObjectsWithTag("Upgrade")) Destroy(upgrade);
+        _upgrades.Clear();
+    }
+
+    void CreateInitBall()
+    {
+        Ball initBall = _ballPool.RequestBall().GetComponent<Ball>();
+        initBall.transform.position = ballInitPos.position;
+        initBall.SetNewDirection();
+    }
+
+    void ClearBricks()
+    {
+        foreach (GameObject brick in _bricks) Destroy(brick);
+        _bricks.Clear();
         bricksLeft = 0;
+    }
+
+    void CreateBricks()
+    {
+        ClearBricks();
         foreach (GameObject spawn in Spawns)
         {
             Brick newBrick = Instantiate(BrickPrefab, spawn.transform).GetComponent<Brick>();
+            _bricks.Add(newBrick.gameObject);
             switch (spawn.name)
             {
                 case "Red Brick Spawn":
@@ -196,29 +217,6 @@ public class GameManager : MonoBehaviour
             }
             bricksLeft++;
         }
-
-        foreach (Ball ball in _balls)
-        {
-            ball.gameObject.SetActive(false);
-            _balls.Remove(ball);
-        }
-        _balls.Clear();
-
-        foreach (Upgrade upgrade in _upgrades)
-        {
-            upgrade.gameObject.SetActive(false);
-            _upgrades.Remove(upgrade);
-        }
-        _upgrades.Clear();
-    }
-
-    void CreateInitBall()
-    {
-        Ball initBall = _ballPool.RequestBall().GetComponent<Ball>();
-        initBall.gameObject.SetActive(true);
-        initBall.transform.position = ballInitPos.position;
-        _balls.Add(initBall);
-        initBall.SetNewDirection();
     }
 
     public void QuitGame() => Application.Quit();

@@ -61,7 +61,7 @@ public class Ball : MonoBehaviour
         else if (collision.gameObject.CompareTag("DeadZone"))
         {
             _audioSource.PlayOneShot(_ballLostSFX);
-            BallPool.instance.RemoveItem(collision.gameObject.GetComponent<Ball>());
+            BallPool.instance.RemoveItem(this);
         }
         else Bounce(collision);
     }
