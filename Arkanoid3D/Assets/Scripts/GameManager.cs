@@ -1,6 +1,4 @@
 using System.Collections.Generic;
-using Unity.VisualScripting;
-using UnityEditor.Animations;
 using UnityEngine;
 
 public class GameManager : MonoBehaviour
@@ -107,6 +105,9 @@ public class GameManager : MonoBehaviour
         _elapsedTime = 0;
         _currentState = GameState.MainMenu;
         uiManager.MainMenuUI();
+        ClearBricks();
+        ClearUpgrades();
+        ClearBalls();
     }
 
     public void LoadGame()
@@ -169,14 +170,18 @@ public class GameManager : MonoBehaviour
     {
         isGameRunning = false;
         Player.transform.SetPositionAndRotation(playerInitPos.position, playerInitPos.rotation);
+    }
 
-        //foreach(Ball ball in _balls) ball.gameObject.SetActive(false);
-        foreach (GameObject ball in GameObject.FindGameObjectsWithTag("Ball")) ball.SetActive(false);
-        _balls.Clear();
-
-        //foreach (Upgrade upgrade in _upgrades) upgrade.DestroyUpgrade();
+    void ClearUpgrades()
+    {
         foreach (GameObject upgrade in GameObject.FindGameObjectsWithTag("Upgrade")) Destroy(upgrade);
         _upgrades.Clear();
+    }
+
+    void ClearBalls()
+    {
+        foreach (GameObject ball in GameObject.FindGameObjectsWithTag("Ball")) ball.SetActive(false);
+        _balls.Clear();
     }
 
     void CreateInitBall()
@@ -195,7 +200,6 @@ public class GameManager : MonoBehaviour
 
     void CreateBricks()
     {
-        ClearBricks();
         foreach (GameObject spawn in Spawns)
         {
             Brick newBrick = Instantiate(BrickPrefab, spawn.transform).GetComponent<Brick>();
