@@ -268,12 +268,12 @@ MonoBehaviour:
   uiManager: {fileID: 1210904539}
   isGameRunning: 0
   ballInitPos: {fileID: 96023339}
-  maxBalls: 20
   _ballPool: {fileID: 740689970}
   _balls: []
   playerInitPos: {fileID: 1431433816}
   BrickPrefab: {fileID: 4118400614009678342, guid: 9c562708ed4153e46883cbd852783214, type: 3}
   bricksLeft: 0
+  _upgradePool: {fileID: 1330081318}
   initLives: 3
   _WinSFX: {fileID: 8300000, guid: 5f22ae0226eb4e146a5e5012d8f40ae0, type: 3}
   _LossSFX: {fileID: 8300000, guid: 09c5d6fbf048ff34f86c4c7252599de7, type: 3}
@@ -2553,6 +2553,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _ballPrefab: {fileID: 843888646815367402, guid: ece0052089087a247828471bb60968e2, type: 3}
   _ballList: []
+  _poolSize: 20
 --- !u!4 &740689971
 Transform:
   m_ObjectHideFlags: 0
@@ -3901,6 +3902,56 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 413817985}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1330081317
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1330081319}
+  - component: {fileID: 1330081318}
+  m_Layer: 0
+  m_Name: UpgradePool
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1330081318
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1330081317}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 233dac83d30974c45bdfb8acd0b4aeae, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  upgradePrefabs:
+  - {fileID: 153733332738614309, guid: cbab9b218dd849c4ea3730b39eff9ced, type: 3}
+  - {fileID: 2572195797281292629, guid: d9ed7b7724dd64a4ebdd8bbb8c330f41, type: 3}
+  - {fileID: 2572195797281292629, guid: a29e9a39375fe974e8eb38d0a7af6f62, type: 3}
+  upgradePool: []
+  _poolSize: 15
+--- !u!4 &1330081319
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1330081317}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 1.4159223, y: 2.7109556, z: -21.170763}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1347633168
 GameObject:
@@ -6032,3 +6083,4 @@ SceneRoots:
   - {fileID: 1450545810}
   - {fileID: 927382433}
   - {fileID: 740689971}
+  - {fileID: 1330081319}

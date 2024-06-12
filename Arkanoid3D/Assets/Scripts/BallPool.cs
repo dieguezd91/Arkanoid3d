@@ -7,14 +7,11 @@ public class BallPool : MonoBehaviour
     public static BallPool instance;
     [SerializeField] GameObject _ballPrefab;
     [SerializeField] List<GameObject> _ballList;
-    public int PoolSize => _poolSize;
-    int _poolSize;
+    [SerializeField] int _poolSize;
 
-    public void Initialize(int poolSize)
+    public void Initialize()
     {
         instance = this;
-        _poolSize = poolSize;
-
         _ballList = new List<GameObject>();
         for (int i = 0; i < _poolSize; i++)
             AddBallToPool();

@@ -13,7 +13,6 @@ public class GameManager : MonoBehaviour
 
     [Header("BALLS")]
     [SerializeField] public Transform ballInitPos;
-    [SerializeField] int maxBalls;
     public BallPool BallPool => _ballPool;
     [SerializeField] BallPool _ballPool;
     public List<Ball> Balls => _balls;
@@ -33,9 +32,11 @@ public class GameManager : MonoBehaviour
     [SerializeField] GameObject BrickPrefab;
     [SerializeField] public int bricksLeft;
 
-    //Upgrades
+    //UPGRADES
     public List<Upgrade> Upgrades => _upgrades;
     List<Upgrade> _upgrades;
+    public UpgradePool UpgradePool => _upgradePool;
+    [SerializeField] UpgradePool _upgradePool;
 
     [Header("LIFE MANAGEMENT")]
     public int initLives;
@@ -65,16 +66,16 @@ public class GameManager : MonoBehaviour
         {
             if (isGameRunning)
             {
-                if (Input.GetKeyDown(KeyCode.Escape)) Pause(); 
+                if (Input.GetKeyDown(KeyCode.Escape)) Pause();
                 _elapsedTime += Time.deltaTime;
                 playerScript.UpdatePlayer();
                 if (bricksLeft == 0) Win();
-                if(_balls.Count <= 0) LoseRound();
+                if (_balls.Count <= 0) LoseRound();
                 for (int i = 0; i < _upgrades.Count; i++) _upgrades[i].UpdateUpgrade();
-                for (int i = 0; i < _balls.Count; i++) _balls[i].UpdateBall(); 
+                for (int i = 0; i < _balls.Count; i++) _balls[i].UpdateBall();
 
             }
-            else if (Input.GetKeyDown(KeyCode.Space)) StartGame();
+            else if (Input.GetKeyDown(KeyCode.Space)) isGameRunning = true;
 
             uiManager.UpdateHUD();
         }
@@ -101,7 +102,6 @@ public class GameManager : MonoBehaviour
     public void MainMenu()
     {
         isGameRunning = false;
-        _elapsedTime = 0;
         _currentState = GameState.MainMenu;
         uiManager.MainMenuUI();
         ClearBricks();
@@ -112,15 +112,10 @@ public class GameManager : MonoBehaviour
     public void LoadGame()
     {
         _lives = initLives;
+        _elapsedTime = 0;
         RestartPositions();
         CreateBricks();
         Play();
-    }
-
-    void StartGame()
-    {
-        _elapsedTime = 0; // Reiniciar el tiempo transcurrido al inicio del juego
-        isGameRunning = true;
     }
 
     public void LoseRound()
@@ -161,7 +156,8 @@ public class GameManager : MonoBehaviour
         _upgrades = new List<Upgrade>();
 
         //Ball pool
-        _ballPool.Initialize(maxBalls);
+        _ballPool.Initialize();
+        _upgradePool.Initialize();
     }
 
     public void RestartPositions()
@@ -173,7 +169,7 @@ public class GameManager : MonoBehaviour
 
     void ClearUpgrades()
     {
-        foreach (GameObject upgrade in GameObject.FindGameObjectsWithTag("Upgrade")) Destroy(upgrade);
+        foreach (GameObject upgrade in GameObject.FindGameObjectsWithTag("Upgrade")) upgrade.SetActive(false);
         _upgrades.Clear();
         if (playerScript.IsBarExpanded) playerScript.ManageBarSize(2);
         if (playerScript.IsMagnetActive) playerScript.ManageMagnetState();
