@@ -23,6 +23,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] Transform playerInitPos;
     public GameObject Player => _player;
     GameObject _player;
+    public PlayerController PlayerScript => playerScript;
     PlayerController playerScript;
 
     [Header("BRICKS")]
@@ -64,16 +65,14 @@ public class GameManager : MonoBehaviour
         {
             if (isGameRunning)
             {
+                if (Input.GetKeyDown(KeyCode.Escape)) Pause(); 
                 _elapsedTime += Time.deltaTime;
                 playerScript.UpdatePlayer();
                 if (bricksLeft == 0) Win();
-
-                for (int i = 0; i < _upgrades.Count; i++) _upgrades[i].UpdateUpgrade();
-
-                for (int i = 0; i < _balls.Count; i++) _balls[i].UpdateBall(); 
                 if(_balls.Count <= 0) LoseRound();
+                for (int i = 0; i < _upgrades.Count; i++) _upgrades[i].UpdateUpgrade();
+                for (int i = 0; i < _balls.Count; i++) _balls[i].UpdateBall(); 
 
-                if (Input.GetKeyDown(KeyCode.Escape)) Pause();
             }
             else if (Input.GetKeyDown(KeyCode.Space)) StartGame();
 
@@ -176,6 +175,8 @@ public class GameManager : MonoBehaviour
     {
         foreach (GameObject upgrade in GameObject.FindGameObjectsWithTag("Upgrade")) Destroy(upgrade);
         _upgrades.Clear();
+        if (playerScript.IsBarExpanded) playerScript.ManageBarSize(2);
+        if (playerScript.IsMagnetActive) playerScript.ManageMagnetState();
     }
 
     void ClearBalls()

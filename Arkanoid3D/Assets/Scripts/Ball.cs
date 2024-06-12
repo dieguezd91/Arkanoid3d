@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
+using UnityEditor.Build;
 using UnityEngine;
 
 public class Ball : MonoBehaviour
@@ -14,11 +15,6 @@ public class Ball : MonoBehaviour
     [SerializeField] int minSpeed;
     [SerializeField] int maxSpeed;
 
-    //MAGNET
-    public bool MagnetActive => magnetActive;
-    bool magnetActive;
-    bool catchedBall;
-    Transform magnetPos;
 
     [Header("AUDIO")]
     [SerializeField] AudioClip _ballLostSFX;
@@ -30,14 +26,12 @@ public class Ball : MonoBehaviour
     {
         _rb = GetComponent<Rigidbody>();
         _audioSource = GetComponent<AudioSource>();
-        magnetPos = GameObject.Find("MagnetPos").GetComponent<Transform>();
         SetNewDirection(); // Establecer una dirección inicial para la pelota
     }
 
     public void UpdateBall()
     {
         _rb.velocity = direction * Mathf.Clamp(speed, minSpeed, maxSpeed); // Mantener la velocidad dentro de los límites
-        if (catchedBall) MagnetLogic();
     }
 
     public void SetNewDirection()
@@ -50,13 +44,8 @@ public class Ball : MonoBehaviour
     {
         if (collision.gameObject.CompareTag("Player"))
         {
-            if (!magnetActive) Bounce(collision);
-            else
-            {
-                _rb.velocity = Vector3.zero;
-                speed = 0;
-                catchedBall = true;
-            }
+            if (!GameManager.instance.PlayerScript.IsMagnetActive) Bounce(collision);
+            else GameManager.instance.PlayerScript.CatchBall(this);
         }
         else if (collision.gameObject.CompareTag("DeadZone"))
         {
@@ -85,17 +74,5 @@ public class Ball : MonoBehaviour
             _audioSource.PlayOneShot(_playerBounce);
         else if(collision.gameObject.tag == "Wall")
             _audioSource.PlayOneShot(_wallBounce);
-    }
-
-    public void ManageMagnetState() => magnetActive = !magnetActive;
-    public void MagnetLogic()
-    {
-        transform.position = magnetPos.position;
-        if (Input.GetKeyDown(KeyCode.Space))
-        {
-            SetNewDirection();
-            speed = maxSpeed; // Restablecer la velocidad al maximo al liberar la pelota
-            catchedBall = false;
-        }
     }
 }

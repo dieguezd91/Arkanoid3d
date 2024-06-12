@@ -60,8 +60,8 @@ public class Brick : MonoBehaviour
         _audioSource.PlayOneShot(breakSFX);
         GetComponent<Collider>().enabled = false;
         TrySpawnUpgrade();
-        GameManager.instance.bricksLeft--;
         yield return new WaitForSeconds(breakSFX.length);
+        GameManager.instance.bricksLeft--;
         gameObject.SetActive(false);
         GameManager.instance.Bricks.Remove(gameObject);
     }
