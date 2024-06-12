@@ -66,7 +66,7 @@ public class Brick : MonoBehaviour
         GameManager.instance.Bricks.Remove(gameObject);
     }
 
-    public void TrySpawnUpgrade()
+    private void TrySpawnUpgrade()
     {
         int n = UnityEngine.Random.Range(0, 10);
         if (n < 3)

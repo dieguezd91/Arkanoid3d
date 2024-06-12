@@ -63,6 +63,6 @@ public class Upgrade : MonoBehaviour
     public void DestroyUpgrade()
     {
         gameManager.Upgrades.Remove(this);
-        gameObject.SetActive(false);
+        Destroy(gameObject);
     }
 }
