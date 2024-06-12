@@ -4,25 +4,23 @@ using UnityEngine;
 
 public class Magnet : Upgrade
 {
-    private Ball _ball;
     public override void ApplyUpgrade()
     {
-        GameObject ball = GameObject.FindGameObjectWithTag("Ball");
-        _ball = ball.GetComponent<Ball>();
-
-        if (_ball.isMagnetEnabled())
+        if (GameManager.instance.PlayerController.IsMagnetEnabled())
         {
-            Destroy(gameObject);
+            gameObject.SetActive(false);
             return;
         }
 
         base.ApplyUpgrade();
-        _ball.EnableMagnet();
-
+        GameManager.instance.PlayerController.EnableMagnet();
     }
+
     public override void EndUpgrade()
     {
         base.EndUpgrade();
-        _ball.DisableMagnet();
+        GameManager.instance.PlayerController.DisableMagnet();
     }
+
+
 }

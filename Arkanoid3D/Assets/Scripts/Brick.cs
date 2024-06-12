@@ -54,14 +54,24 @@ public class Brick : MonoBehaviour
     {
         TrySpawnUpgrade();
         GameManager.instance.bricksLeft--;
-        Destroy(gameObject, .3f);
+        //Destroy(gameObject, .3f);
+        gameObject.SetActive(false);
     }
 
-    private void TrySpawnUpgrade()
+    public void TrySpawnUpgrade()
     {
         int n = Random.Range(0, 10);
-        if (n < 3) Instantiate(CreateUpgrade(), transform.position, transform.rotation);
+        if (n < 5) 
+        {
+            Upgrade newUpgrade = UpgradePool.instance.RequestUpgrade(transform.position).GetComponent<Upgrade>();
+        }
     }
 
-    GameObject CreateUpgrade() => _upgrades[Random.Range(0, _upgrades.Length)];
+    //private void TrySpawnUpgrade()
+    //{
+    //    int n = Random.Range(0, 10);
+    //    if (n < 3) Instantiate(CreateUpgrade(), transform.position, transform.rotation);
+    //}
+
+    //GameObject CreateUpgrade() => _upgrades[Random.Range(0, _upgrades.Length)];
 }

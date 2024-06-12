@@ -12,21 +12,17 @@ public class Ball : MonoBehaviour
     public Vector3 velocity;
     public Vector3 direction; // Dirección de movimiento de la pelota
 
-    private bool magnetActive = false;
-    private bool catchedBall = false;
-    [SerializeField] Transform magnetPos;
 
     private void Start()
     {
         _rb = GetComponent<Rigidbody>();
-        magnetPos = GameObject.Find("MagnetPos").GetComponent<Transform>();
         SetNewDirection(); // Establecer una dirección inicial para la pelota
     }
 
     public void UpdateBall()
     {
         _rb.velocity = direction * Mathf.Clamp(speed, minSpeed, maxSpeed); // Mantener la velocidad dentro de los límites
-        MagnetLogic();
+        GameManager.instance.PlayerController.MagnetLogic();
     }
 
     public void SetNewDirection()
@@ -37,27 +33,18 @@ public class Ball : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
-        if (collision.gameObject.CompareTag("Player") && magnetActive)
-        {
-            _rb.velocity = Vector3.zero;
-            speed = 0f;
-            catchedBall = true;
-        }
-        else
-        {
-            // Cambiar la dirección de la pelota al colisionar con otro objeto
-            direction = Vector3.Reflect(direction, collision.contacts[0].normal);
-            direction = new Vector3(direction.x, 0, direction.z).normalized; // Mantener la dirección en el eje Y en 0 y normalizar
+        // Cambiar la dirección de la pelota al colisionar con otro objeto
+        direction = Vector3.Reflect(direction, collision.contacts[0].normal);
+        direction = new Vector3(direction.x, 0, direction.z).normalized; // Mantener la dirección en el eje Y en 0 y normalizar
 
-            // Asegurarse de que el ángulo de rebote no sea demasiado plano
-            if (Mathf.Abs(direction.z) < 0.1f)
-            {
-                direction.z = direction.z > 0 ? 0.1f : -0.1f; // Ajustar el ángulo de rebote
-                direction = direction.normalized; // Normalizar la dirección ajustada
-            }
-
-            speed = Mathf.Clamp(speed, minSpeed, maxSpeed); // Asegurarse de que la velocidad este dentro de los limites
+        // Asegurarse de que el ángulo de rebote no sea demasiado plano
+        if (Mathf.Abs(direction.z) < 0.1f)
+        {
+            direction.z = direction.z > 0 ? 0.1f : -0.1f; // Ajustar el ángulo de rebote
+            direction = direction.normalized; // Normalizar la dirección ajustada
         }
+
+        speed = Mathf.Clamp(speed, minSpeed, maxSpeed); // Asegurarse de que la velocidad este dentro de los limites
 
         if (collision.gameObject.CompareTag("DeadZone"))
         {
@@ -71,32 +58,4 @@ public class Ball : MonoBehaviour
         Gizmos.DrawRay(transform.position, direction * speed);
     }
 
-    public void EnableMagnet()
-    {
-        magnetActive = true;
-    }
-
-    public void DisableMagnet()
-    {
-        magnetActive = false;
-    }
-
-    public bool isMagnetEnabled()
-    {
-        return magnetActive;
-    }
-
-    public void MagnetLogic()
-    {
-        if (catchedBall)
-        {
-            transform.position = magnetPos.position;
-        }
-        if (catchedBall && Input.GetKeyDown(KeyCode.Space))
-        {
-            SetNewDirection();
-            speed = maxSpeed; // Restablecer la velocidad al maximo al liberar la pelota
-            catchedBall = false;
-        }
-    }
 }

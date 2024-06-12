@@ -12,7 +12,7 @@ public class ExpandBarUpgrade : Upgrade
 
         if (playerController.IsBarExpanded())
         {
-            Destroy(gameObject);
+            gameObject.SetActive(false);
             return;
         }
 

@@ -14,7 +14,6 @@ public class Upgrade : MonoBehaviour
     public virtual void Start()
     {
         _rb = GetComponent<Rigidbody>();
-        GameManager.instance.Upgrades.Add(this);
     }
 
     public void UpdateUpgrade()
@@ -23,7 +22,6 @@ public class Upgrade : MonoBehaviour
         {
             if (_rb != null)
             {
-                Debug.Log(_rb);
                 _rb.velocity = Vector3.back * speed;
             }
         }
@@ -32,7 +30,17 @@ public class Upgrade : MonoBehaviour
 
     void OnTriggerEnter(Collider collision)
     {
-        if (collision.gameObject.CompareTag("Player")) ApplyUpgrade();
+        if (collision.gameObject.CompareTag("Player"))
+        {
+            PlayerController playerController = collision.gameObject.GetComponent<PlayerController>();
+            if (playerController != null)
+            {
+                if (!playerController.IsMagnetEnabled() && !playerController.IsBarExpanded())
+                {
+                    ApplyUpgrade();
+                }
+            }
+        }
         else if (collision.gameObject.CompareTag("DeadZone")) DestroyUpgrade();
     }
 
@@ -54,7 +62,6 @@ public class Upgrade : MonoBehaviour
 
     public void DestroyUpgrade()
     {
-        GameManager.instance.Upgrades.Remove(this);
-        Destroy(gameObject);
+        gameObject.SetActive(false);
     }
 }

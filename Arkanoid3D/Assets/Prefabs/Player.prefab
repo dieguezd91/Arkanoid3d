@@ -100,6 +100,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   speedMovement: 50
   xRange: 23
+  magnetActive: 0
+  catchedBall: 0
+  magnetPos: {fileID: 4679034693237253973}
 --- !u!65 &4036470321053687917
 BoxCollider:
   m_ObjectHideFlags: 0
