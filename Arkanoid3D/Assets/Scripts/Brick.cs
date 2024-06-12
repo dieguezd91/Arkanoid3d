@@ -7,6 +7,8 @@ public class Brick : MonoBehaviour
     public int HP;
     [HideInInspector] public string color;
     [SerializeField] GameObject[] _upgrades;
+    [Range(0, 100)]
+    [SerializeField] int upgradeSpawnProbability;
         
     Renderer _renderer;
     [SerializeField] Material _redMat;
@@ -68,9 +70,9 @@ public class Brick : MonoBehaviour
 
     private void TrySpawnUpgrade()
     {
-        int n = UnityEngine.Random.Range(0, 10);
-        if (n < 3)
-        {
+        int n = UnityEngine.Random.Range(0, 100);
+        if (n < upgradeSpawnProbability)
+        {   
             GameObject newUpgrade = Instantiate(CreateUpgrade(), transform.position, transform.rotation);
             GameManager.instance.Upgrades.Add(newUpgrade.GetComponent<Upgrade>());
         }

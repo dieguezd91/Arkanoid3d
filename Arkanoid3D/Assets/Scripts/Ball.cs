@@ -6,8 +6,6 @@ using UnityEngine;
 
 public class Ball : MonoBehaviour
 {
-    
-    Rigidbody _rb;
     Vector3 direction;
 
     [Header("Speed values")]
@@ -24,14 +22,13 @@ public class Ball : MonoBehaviour
 
     private void Start()
     {
-        _rb = GetComponent<Rigidbody>();
         _audioSource = GetComponent<AudioSource>();
         SetNewDirection(); // Establecer una dirección inicial para la pelota
     }
 
     public void UpdateBall()
     {
-        _rb.velocity = direction * Mathf.Clamp(speed, minSpeed, maxSpeed); // Mantener la velocidad dentro de los límites
+        transform.position += direction * Mathf.Clamp(speed, minSpeed, maxSpeed) * Time.deltaTime; // Mantener la velocidad dentro de los límites
     }
 
     public void SetNewDirection()

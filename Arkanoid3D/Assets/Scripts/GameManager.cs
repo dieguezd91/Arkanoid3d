@@ -120,7 +120,6 @@ public class GameManager : MonoBehaviour
     void StartGame()
     {
         _elapsedTime = 0; // Reiniciar el tiempo transcurrido al inicio del juego
-        CreateInitBall();
         isGameRunning = true;
     }
 
@@ -169,6 +168,7 @@ public class GameManager : MonoBehaviour
     {
         isGameRunning = false;
         Player.transform.SetPositionAndRotation(playerInitPos.position, playerInitPos.rotation);
+        CreateInitBall();
     }
 
     void ClearUpgrades()

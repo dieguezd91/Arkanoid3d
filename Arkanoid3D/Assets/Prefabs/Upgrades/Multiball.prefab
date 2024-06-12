@@ -124,7 +124,7 @@ MonoBehaviour:
   speed: 4
   upgradeDuration: 1
   SFX: {fileID: 8300000, guid: 8b27a1c5614162a4a9ec9466a13e7eeb, type: 3}
-  ballsToSpawn: 4
+  ballsToSpawn: 2
 --- !u!54 &1451597161527578473
 Rigidbody:
   m_ObjectHideFlags: 0

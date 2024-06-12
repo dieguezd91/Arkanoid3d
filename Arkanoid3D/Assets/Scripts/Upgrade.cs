@@ -3,7 +3,6 @@ using UnityEngine;
 public class Upgrade : MonoBehaviour
 {
     protected GameManager gameManager;
-    Rigidbody _rb;
 
     float _upgradeStartTime;
     bool _isUpgradeActive;
@@ -11,6 +10,7 @@ public class Upgrade : MonoBehaviour
     [Header("Data")]
     [SerializeField] string upgradeName;
     [SerializeField] int speed;
+    Vector3 _movement;
     [SerializeField] float upgradeDuration;
 
     //AUDIO
@@ -19,15 +19,13 @@ public class Upgrade : MonoBehaviour
 
     public virtual void Start()
     {
-        _rb = GetComponent<Rigidbody>();
         _audioSource = GetComponent<AudioSource>();
         gameManager = GameManager.instance;
     }
 
     public void UpdateUpgrade()
     {
-        if (!_isUpgradeActive)
-            if (_rb != null) _rb.velocity = Vector3.back * speed; 
+        if (!_isUpgradeActive) transform.position += Vector3.back * speed * Time.deltaTime;
         else if (CheckUpgradeFinishTime()) EndUpgrade();
     }
 
