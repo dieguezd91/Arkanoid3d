@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class GameManager : MonoBehaviour
@@ -57,8 +58,6 @@ public class GameManager : MonoBehaviour
     private void Start()
     {
         instance = this;
-
-        GetActors();
         uiManager.Initialize();
     }
 
@@ -110,10 +109,12 @@ public class GameManager : MonoBehaviour
         ClearBricks();
         ClearUpgrades();
         ClearBalls();
+        RemoveActors();
     }
 
     public void LoadGame()
     {
+        GetActors();
         ChangeSong(gameplaySong);
         _lives = initLives;
         _elapsedTime = 0;
@@ -162,6 +163,21 @@ public class GameManager : MonoBehaviour
         //Ball pool
         _ballPool.Initialize();
         _upgradePool.Initialize();
+    }
+
+    void RemoveActors()
+    {
+        //Player
+        _player = null;
+        playerInitPos = null;
+        playerScript = null;
+
+        //Bricks
+        Spawns = null;
+        _bricks = null;
+
+        //Upgrades
+        _upgrades = null;
     }
 
     public void RestartPositions()
@@ -222,6 +238,7 @@ public class GameManager : MonoBehaviour
             }
             bricksLeft++;
         }
+        Spawns.ToList().Clear();
     }
 
     private void ChangeSong(AudioClip newSong)
