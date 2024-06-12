@@ -6,19 +6,22 @@ public class Magnet : Upgrade
 {
     public override void ApplyUpgrade()
     {
-        if (GameManager.instance.PlayerScript.IsMagnetActive)
+        if (GameManager.instance.PlayerController.IsMagnetEnabled())
         {
-            DestroyUpgrade();
+            gameObject.SetActive(false);
             return;
         }
 
         base.ApplyUpgrade();
-        GameManager.instance.PlayerScript.ManageMagnetState();
-
+        GameManager.instance.PlayerController.EnableMagnet();
     }
+
     public override void EndUpgrade()
     {
         GameManager.instance.PlayerScript.ManageMagnetState();
         base.EndUpgrade();
+        GameManager.instance.PlayerController.DisableMagnet();
     }
+
+
 }

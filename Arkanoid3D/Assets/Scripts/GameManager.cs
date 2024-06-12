@@ -23,8 +23,8 @@ public class GameManager : MonoBehaviour
     [SerializeField] Transform playerInitPos;
     public GameObject Player => _player;
     GameObject _player;
-    public PlayerController PlayerScript => playerScript;
-    PlayerController playerScript;
+    PlayerController _playerScript;
+    public PlayerController PlayerController => _playerScript;
 
     [Header("BRICKS")]
     GameObject[] Spawns;
@@ -32,10 +32,6 @@ public class GameManager : MonoBehaviour
     List<GameObject> _bricks;
     [SerializeField] GameObject BrickPrefab;
     [SerializeField] public int bricksLeft;
-
-    //Upgrades
-    public List<Upgrade> Upgrades => _upgrades;
-    List<Upgrade> _upgrades;
 
     [Header("LIFE MANAGEMENT")]
     public int initLives;
@@ -67,12 +63,30 @@ public class GameManager : MonoBehaviour
             {
                 if (Input.GetKeyDown(KeyCode.Escape)) Pause(); 
                 _elapsedTime += Time.deltaTime;
-                playerScript.UpdatePlayer();
+                _playerScript.UpdatePlayer();
                 if (bricksLeft == 0) Win();
                 if(_balls.Count <= 0) LoseRound();
                 for (int i = 0; i < _upgrades.Count; i++) _upgrades[i].UpdateUpgrade();
                 for (int i = 0; i < _balls.Count; i++) _balls[i].UpdateBall(); 
 
+                if (UpgradePool.instance.upgradePool.Count > 0)
+                {
+                    for (int i = UpgradePool.instance.upgradePool.Count - 1; i >= 0; i--)
+                    {
+                        UpgradePool.instance.upgradePool[i].GetComponent<Upgrade>().UpdateUpgrade();
+                    }
+                }
+
+                if (_balls.Count > 0)
+                {
+                    for (int i = _balls.Count - 1; i >= 0; i--)
+                    {
+                        _balls[i].UpdateBall();
+                    }
+                }
+                else LoseRound();
+
+                if (Input.GetKeyDown(KeyCode.Escape)) Pause();
             }
             else if (Input.GetKeyDown(KeyCode.Space)) StartGame();
 
@@ -152,7 +166,7 @@ public class GameManager : MonoBehaviour
         //Player
         _player = GameObject.FindGameObjectWithTag("Player");
         playerInitPos = GameObject.Find("PlayerInitPos").GetComponent<Transform>();
-        playerScript = _player.GetComponent<PlayerController>();
+        _playerScript = _player.GetComponent<PlayerController>();
 
         //Bricks
         Spawns = GameObject.FindGameObjectsWithTag("BrickSpawn");

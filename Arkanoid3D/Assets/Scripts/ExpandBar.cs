@@ -10,7 +10,7 @@ public class ExpandBar : Upgrade
         playerController = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerController>();
         if (playerController.IsBarExpanded)
         {
-            DestroyUpgrade();
+            gameObject.SetActive(false);
             return;
         }
 
