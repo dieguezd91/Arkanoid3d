@@ -49,7 +49,10 @@ public class GameManager : MonoBehaviour
     [SerializeField] AudioClip _RoundLostSFX;
     [SerializeField] AudioClip _PlaySFX;
     [SerializeField] AudioClip _PauseSFX;
-    AudioSource _audioSource;
+    [SerializeField] AudioSource _audioSource;
+    [SerializeField] AudioClip mainMenuSong;
+    [SerializeField] AudioClip gameplaySong;
+    [SerializeField] AudioSource _musicSource;
 
     private void Start()
     {
@@ -57,7 +60,6 @@ public class GameManager : MonoBehaviour
 
         GetActors();
         uiManager.Initialize();
-        _audioSource = GetComponent<AudioSource>();
     }
 
     void Update()
@@ -101,6 +103,7 @@ public class GameManager : MonoBehaviour
 
     public void MainMenu()
     {
+        ChangeSong(mainMenuSong);
         isGameRunning = false;
         _currentState = GameState.MainMenu;
         uiManager.MainMenuUI();
@@ -111,6 +114,7 @@ public class GameManager : MonoBehaviour
 
     public void LoadGame()
     {
+        ChangeSong(gameplaySong);
         _lives = initLives;
         _elapsedTime = 0;
         RestartPositions();
@@ -218,6 +222,12 @@ public class GameManager : MonoBehaviour
             }
             bricksLeft++;
         }
+    }
+
+    private void ChangeSong(AudioClip newSong)
+    {
+        _musicSource.Stop();
+        _musicSource.PlayOneShot(newSong);
     }
 
     public void QuitGame() => Application.Quit();

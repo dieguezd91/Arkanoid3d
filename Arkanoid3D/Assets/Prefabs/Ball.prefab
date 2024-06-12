@@ -148,8 +148,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   speed: 0
-  minSpeed: 5
-  maxSpeed: 10
+  minSpeed: 10
+  maxSpeed: 20
   _ballLostSFX: {fileID: 8300000, guid: 2ee8752b0c4911947a1bd3134d49b1cc, type: 3}
   _wallBounce: {fileID: 8300000, guid: f024765cee84a9c4bbcbae188380330b, type: 3}
   _playerBounce: {fileID: 8300000, guid: d3a8ef4c780b0944596a6b45cce6397e, type: 3}

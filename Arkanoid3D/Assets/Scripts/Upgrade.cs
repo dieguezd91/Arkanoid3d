@@ -10,7 +10,6 @@ public class Upgrade : MonoBehaviour
     [Header("Data")]
     [SerializeField] string upgradeName;
     [SerializeField] int speed;
-    Vector3 _movement;
     [SerializeField] float upgradeDuration;
 
     //AUDIO

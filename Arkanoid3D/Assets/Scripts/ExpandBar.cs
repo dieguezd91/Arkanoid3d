@@ -7,7 +7,7 @@ public class ExpandBar : Upgrade
 
     public override void ApplyUpgrade()
     {
-        playerController = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerController>();
+        playerController = GameManager.instance.PlayerScript;
         if (playerController.IsBarExpanded)
         {
             DestroyUpgrade();
@@ -20,7 +20,7 @@ public class ExpandBar : Upgrade
 
     public override void EndUpgrade()
     {
-        if (playerController != null) playerController.ManageBarSize(expandedScale);
+        playerController.ManageBarSize(expandedScale);
         base.EndUpgrade();
     }
 }

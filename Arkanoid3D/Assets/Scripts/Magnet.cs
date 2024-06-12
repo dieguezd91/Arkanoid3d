@@ -4,21 +4,23 @@ using UnityEngine;
 
 public class Magnet : Upgrade
 {
+    PlayerController playerController;
     public override void ApplyUpgrade()
     {
-        if (GameManager.instance.PlayerScript.IsMagnetActive)
+        playerController = GameManager.instance.PlayerScript;
+        if (playerController.IsMagnetActive)
         {
             DestroyUpgrade();
             return;
         }
 
         base.ApplyUpgrade();
-        GameManager.instance.PlayerScript.ManageMagnetState();
+        playerController.ManageMagnetState();
 
     }
     public override void EndUpgrade()
     {
-        GameManager.instance.PlayerScript.ManageMagnetState();
+        playerController.ManageMagnetState();
         base.EndUpgrade();
     }
 }
