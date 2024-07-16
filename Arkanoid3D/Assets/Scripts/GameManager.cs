@@ -69,19 +69,22 @@ public class GameManager : MonoBehaviour
             {
                 if (Input.GetKeyDown(KeyCode.Escape)) Pause();
                 _elapsedTime += Time.deltaTime;
-                playerScript.UpdatePlayer();
+                if (playerScript != null)
+                {
+                    playerScript.UpdatePlayer();
+                }
+
                 if (bricksLeft == 0) Win();
                 if (_balls.Count <= 0) LoseRound();
                 for (int i = 0; i < _upgrades.Count; i++) _upgrades[i].UpdateUpgrade();
                 for (int i = 0; i < _balls.Count; i++) _balls[i].UpdateBall();
-
             }
             else if (Input.GetKeyDown(KeyCode.Space)) isGameRunning = true;
 
             uiManager.UpdateHUD();
         }
         else if (_currentState == GameState.Paused)
-            if (Input.GetKeyDown(KeyCode.Escape)) Play(); 
+            if (Input.GetKeyDown(KeyCode.Escape)) Play();
     }
 
     public void Play()
@@ -143,15 +146,19 @@ public class GameManager : MonoBehaviour
     void Lose()
     {
         _audioSource.PlayOneShot(_LossSFX);
-        MainMenu();
+        isGameRunning = false;
+        uiManager._gameOverScreen.SetActive(true);
     }
 
     void GetActors()
     {
         //Player
         _player = GameObject.FindGameObjectWithTag("Player");
-        playerInitPos = GameObject.Find("PlayerInitPos").GetComponent<Transform>();
-        playerScript = _player.GetComponent<PlayerController>();
+        if (_player != null)
+        {
+            playerInitPos = GameObject.Find("PlayerInitPos").GetComponent<Transform>();
+            playerScript = _player.GetComponent<PlayerController>();
+        }
 
         //Bricks
         Spawns = GameObject.FindGameObjectsWithTag("BrickSpawn");
@@ -183,7 +190,8 @@ public class GameManager : MonoBehaviour
     public void RestartPositions()
     {
         isGameRunning = false;
-        Player.transform.SetPositionAndRotation(playerInitPos.position, playerInitPos.rotation);
+        if (Player != null && playerInitPos != null)
+            Player.transform.SetPositionAndRotation(playerInitPos.position, playerInitPos.rotation);
         CreateInitBall();
     }
 
@@ -191,8 +199,11 @@ public class GameManager : MonoBehaviour
     {
         foreach (GameObject upgrade in GameObject.FindGameObjectsWithTag("Upgrade")) upgrade.SetActive(false);
         _upgrades.Clear();
-        if (playerScript.IsBarExpanded) playerScript.ManageBarSize(2);
-        if (playerScript.IsMagnetActive) playerScript.ManageMagnetState();
+        if (playerScript != null)
+        {
+            if (playerScript.IsBarExpanded) playerScript.ManageBarSize(2);
+            if (playerScript.IsMagnetActive) playerScript.ManageMagnetState();
+        }
     }
 
     void ClearBalls()

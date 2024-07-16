@@ -13,7 +13,9 @@ public class UIManager : MonoBehaviour
     [SerializeField] GameObject _pauseMenu;
     [SerializeField] GameObject _mainMenu;
     [SerializeField] GameObject _hud;
+    [SerializeField] public GameObject _gameOverScreen;
     [SerializeField] TextMeshProUGUI _timer;
+    [SerializeField] TextMeshProUGUI _lives;
 
     public void Initialize()
     {
@@ -41,6 +43,7 @@ public class UIManager : MonoBehaviour
         _mainMenu.SetActive(true);
         _pauseMenu.SetActive(false);
         _hud.SetActive(false);
+        _gameOverScreen.SetActive(false);
     }
 
     public void UpdateHUD()
@@ -49,5 +52,6 @@ public class UIManager : MonoBehaviour
         int minutes = Mathf.FloorToInt(gameManager.ElapsedTime / 60);
         int seconds = Mathf.FloorToInt(gameManager.ElapsedTime % 60);
         _timer.text = string.Format("{0:00}:{1:00}", minutes, seconds);
+        _lives.text = "x" + gameManager.Lives.ToString();
     }
 }   
