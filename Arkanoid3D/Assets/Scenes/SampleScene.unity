@@ -4342,6 +4342,10 @@ PrefabInstance:
       propertyPath: m_Color.r
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 2435076185560985945, guid: e07d1bdb51bd87d4a833b4cdd38a98e0, type: 3}
+      propertyPath: m_RaycastTarget
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 2571876834046168216, guid: e07d1bdb51bd87d4a833b4cdd38a98e0, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
