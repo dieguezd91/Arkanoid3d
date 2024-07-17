@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -55,10 +56,16 @@ public class GameManager : MonoBehaviour
     [SerializeField] AudioClip gameplaySong;
     [SerializeField] AudioSource _musicSource;
 
+    [SerializeField] Light _light;
+    private Color _originalLightColor;
+    bool _missedPoint;
+    float _restoreLightTimer;
+
     private void Start()
     {
         instance = this;
         uiManager.Initialize();
+        _originalLightColor = _light.color;
     }
 
     void Update()
@@ -79,12 +86,23 @@ public class GameManager : MonoBehaviour
                 for (int i = 0; i < _upgrades.Count; i++) _upgrades[i].UpdateUpgrade();
                 for (int i = 0; i < _balls.Count; i++) _balls[i].UpdateBall();
             }
-            else if (Input.GetKeyDown(KeyCode.Space)) isGameRunning = true;
+            else if (Input.GetKeyDown(KeyCode.Space) && !_missedPoint) isGameRunning = true;
 
             uiManager.UpdateHUD();
         }
         else if (_currentState == GameState.Paused)
             if (Input.GetKeyDown(KeyCode.Escape)) Play();
+
+        if (_missedPoint)
+        {
+            _restoreLightTimer += Time.deltaTime;
+            if (_restoreLightTimer >= 1f)
+            {
+                _light.color = _originalLightColor;
+                _missedPoint = false;
+                _restoreLightTimer = 0f;
+            }
+        }
     }
 
     public void Play()
@@ -129,6 +147,8 @@ public class GameManager : MonoBehaviour
     public void LoseRound()
     {
         _lives--;
+        _light.color = Color.red;
+        _missedPoint = true;
         if (_lives > 0)
         {
             RestartPositions();
@@ -147,6 +167,7 @@ public class GameManager : MonoBehaviour
     {
         _audioSource.PlayOneShot(_LossSFX);
         isGameRunning = false;
+        uiManager._hud.SetActive(false);
         uiManager._gameOverScreen.SetActive(true);
     }
 
@@ -189,6 +210,7 @@ public class GameManager : MonoBehaviour
 
     public void RestartPositions()
     {
+        //_missedPoint = false;
         isGameRunning = false;
         if (Player != null && playerInitPos != null)
             Player.transform.SetPositionAndRotation(playerInitPos.position, playerInitPos.rotation);

@@ -162,7 +162,7 @@ PlayerSettings:
   androidSupportedAspectRatio: 1
   androidMaxAspectRatio: 2.1
   applicationIdentifier:
-    Standalone: com.DefaultCompany.Arkanoid3D
+    Standalone: com.AstroRift-Studios.Arkanoid3D
   buildNumber:
     Standalone: 0
     VisionOS: 0

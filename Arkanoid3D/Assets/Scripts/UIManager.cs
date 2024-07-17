@@ -12,7 +12,7 @@ public class UIManager : MonoBehaviour
     [Header("UI COMPONENTS")]
     [SerializeField] GameObject _pauseMenu;
     [SerializeField] GameObject _mainMenu;
-    [SerializeField] GameObject _hud;
+    [SerializeField] public GameObject _hud;
     [SerializeField] public GameObject _gameOverScreen;
     [SerializeField] TextMeshProUGUI _timer;
     [SerializeField] TextMeshProUGUI _lives;
