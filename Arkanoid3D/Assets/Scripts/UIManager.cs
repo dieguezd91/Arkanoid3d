@@ -14,6 +14,7 @@ public class UIManager : MonoBehaviour
     [SerializeField] GameObject _mainMenu;
     [SerializeField] public GameObject _hud;
     [SerializeField] public GameObject _gameOverScreen;
+    [SerializeField] public GameObject _winScreen;
     [SerializeField] TextMeshProUGUI _timer;
     [SerializeField] TextMeshProUGUI _lives;
 
@@ -43,6 +44,7 @@ public class UIManager : MonoBehaviour
         _mainMenu.SetActive(true);
         _pauseMenu.SetActive(false);
         _hud.SetActive(false);
+        _winScreen.SetActive(false);
         _gameOverScreen.SetActive(false);
     }
 

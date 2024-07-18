@@ -85,6 +85,7 @@ public class GameManager : MonoBehaviour
                 if (_balls.Count <= 0) LoseRound();
                 for (int i = 0; i < _upgrades.Count; i++) _upgrades[i].UpdateUpgrade();
                 for (int i = 0; i < _balls.Count; i++) _balls[i].UpdateBall();
+
             }
             else if (Input.GetKeyDown(KeyCode.Space) && !_missedPoint) isGameRunning = true;
 
@@ -103,6 +104,7 @@ public class GameManager : MonoBehaviour
                 _restoreLightTimer = 0f;
             }
         }
+
     }
 
     public void Play()
@@ -160,7 +162,9 @@ public class GameManager : MonoBehaviour
     void Win()
     {
         _audioSource.PlayOneShot(_WinSFX);
-        MainMenu();
+        isGameRunning = false;
+        uiManager._hud.SetActive(false);
+        uiManager._winScreen.SetActive(true);
     }
 
     void Lose()
